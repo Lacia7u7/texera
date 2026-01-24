@@ -166,7 +166,7 @@ export class DatasetService {
       let lastETA = 0;
       let lastUpdateTime = 0;
       let inFlight = 0;
-      let wsId: string | null = null;
+      let uploadId: string | null = null;
       let concurrency = concurrencyLimit;
       let completedParts = 0;
       let finishRequested = false;
@@ -262,8 +262,8 @@ export class DatasetService {
           ts: Date.now(),
           data,
         };
-        if (includeIds && wsId) {
-          payload.wsId = wsId;
+        if (includeIds && uploadId) {
+          payload.uploadId = uploadId;
         }
         if (websocket.readyState === WebSocket.OPEN) {
           websocket.send(JSON.stringify(payload));
@@ -283,7 +283,7 @@ export class DatasetService {
       };
 
       const requestParts = () => {
-        if (!wsId || closed) return;
+        if (!uploadId || closed) return;
         const freeSlots = concurrency - inFlight;
         if (freeSlots > 0) {
           sendMessage("request_parts", { limit: freeSlots });
@@ -308,7 +308,7 @@ export class DatasetService {
       const handleError = (error: Error) => {
         if (closed) return;
         emitProgress("aborted");
-        if (wsId) {
+        if (uploadId) {
           sendMessage("abort", { reason: "error" });
         }
         observer.error(error);
@@ -390,7 +390,7 @@ export class DatasetService {
             xhr.abort();
           } catch {}
         });
-        if (sendAbort && wsId && websocket.readyState === WebSocket.OPEN) {
+        if (sendAbort && uploadId && websocket.readyState === WebSocket.OPEN) {
           sendMessage("abort", { reason: "client" });
         }
         if (websocket.readyState === WebSocket.OPEN || websocket.readyState === WebSocket.CONNECTING) {
@@ -417,7 +417,7 @@ export class DatasetService {
         const message = JSON.parse(event.data);
         switch (message.type) {
           case "init_ack": {
-            wsId = message.wsId;
+            uploadId = message.uploadId;
             completedParts = message.data?.completedParts ?? 0;
             concurrency = concurrencyLimit;
             observer.next({

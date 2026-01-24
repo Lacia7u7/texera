@@ -44,7 +44,6 @@ import org.jooq.impl.DSL.{inline => inl}
 
 import java.net.URLDecoder
 import java.nio.charset.StandardCharsets
-import java.util.UUID
 import jakarta.websocket.server.ServerEndpoint
 import jakarta.websocket.{OnClose, OnMessage, OnOpen, Session}
 import scala.collection.mutable
@@ -55,65 +54,34 @@ import jakarta.ws.rs.core.Response
 object DatasetUploadWebsocketManager extends LazyLogging {
   private val objectMapper = JSONUtils.objectMapper
   private val context = SqlServer.getInstance().createDSLContext()
-  private val wsIdField = DSL.field("ws_id", classOf[String])
-  private val validUntilField = DSL.field("valid_until_ms", classOf[java.lang.Long])
+  private val lockUntilField = DSL.field("lock_until_ms", classOf[java.lang.Long])
   private val reservationTtlMs = 15000L
   private val retryAfterMs = 500L
 
   private val uploadIdSessions = new mutable.HashMap[String, mutable.Set[Session]]()
-  private val sessionIdToUploadId = new mutable.HashMap[String, String]()
-  private val sessionIdToWsId = new mutable.HashMap[String, String]()
-
   case class InitResponse(
       uploadId: String,
       completedParts: Int,
       resumed: Boolean
   )
 
-  def registerSession(session: Session, uploadId: String, wsId: String): Unit = synchronized {
+  def registerSession(session: Session, uploadId: String): Unit = synchronized {
     val set = uploadIdSessions.getOrElseUpdate(uploadId, mutable.Set.empty)
     set.add(session)
-    sessionIdToUploadId(session.getId) = uploadId
-    sessionIdToWsId(session.getId) = wsId
-  }
-
-  def wsIdForSession(session: Session): Option[String] = synchronized {
-    sessionIdToWsId.get(session.getId)
-  }
-
-  def uploadIdForSession(session: Session): Option[String] = synchronized {
-    sessionIdToUploadId.get(session.getId)
   }
 
   def unregisterSession(session: Session): Unit = synchronized {
-    val sessionId = session.getId
-    sessionIdToUploadId.remove(sessionId).foreach { uploadId =>
-      uploadIdSessions.get(uploadId).foreach { set =>
-        set.remove(session)
-        if (set.isEmpty) {
-          uploadIdSessions.remove(uploadId)
-        }
-      }
-    }
-    sessionIdToWsId.remove(sessionId).foreach(releaseReservationsForWsId)
+    val emptyUploads = uploadIdSessions.collect {
+      case (uploadId, set) if {
+            set.remove(session)
+            set.isEmpty
+          } =>
+        uploadId
+    }.toList
+    emptyUploads.foreach(uploadIdSessions.remove)
   }
 
-  def releaseReservationsForWsId(wsId: String): Unit = {
-    withTransaction(context) { ctx =>
-      ctx
-        .update(DATASET_UPLOAD_SESSION_PART)
-        .set(wsIdField, null.asInstanceOf[String])
-        .set(validUntilField, null.asInstanceOf[java.lang.Long])
-        .where(
-          wsIdField
-            .eq(wsId)
-            .and(DATASET_UPLOAD_SESSION_PART.ETAG.eq(""))
-        )
-        .execute()
-    }
-  }
-
-  def reserveParts(uploadId: String, wsId: String, limit: Int): Either[Long, List[(Int, Long)]] = {
+  def reserveParts(uploadId: String, limit: Int): Either[Long, List[(Int, Long)]] = {
     if (limit <= 0) {
       return Left(retryAfterMs)
     }
@@ -121,14 +89,13 @@ object DatasetUploadWebsocketManager extends LazyLogging {
     val reserved = withTransaction(context) { ctx =>
       ctx
         .update(DATASET_UPLOAD_SESSION_PART)
-        .set(wsIdField, null.asInstanceOf[String])
-        .set(validUntilField, null.asInstanceOf[java.lang.Long])
+        .set(lockUntilField, null.asInstanceOf[java.lang.Long])
         .where(
           DATASET_UPLOAD_SESSION_PART.UPLOAD_ID
             .eq(uploadId)
             .and(DATASET_UPLOAD_SESSION_PART.ETAG.eq(""))
-            .and(validUntilField.isNotNull)
-            .and(validUntilField.lt(nowMs))
+            .and(lockUntilField.isNotNull)
+            .and(lockUntilField.lt(nowMs))
         )
         .execute()
 
@@ -140,7 +107,7 @@ object DatasetUploadWebsocketManager extends LazyLogging {
             DATASET_UPLOAD_SESSION_PART.UPLOAD_ID
               .eq(uploadId)
               .and(DATASET_UPLOAD_SESSION_PART.ETAG.eq(""))
-              .and(wsIdField.isNull.or(validUntilField.lt(nowMs)))
+              .and(lockUntilField.isNull.or(lockUntilField.lt(nowMs)))
           )
           .orderBy(DATASET_UPLOAD_SESSION_PART.PART_NUMBER.asc())
           .limit(limit)
@@ -154,8 +121,7 @@ object DatasetUploadWebsocketManager extends LazyLogging {
         val validUntil = nowMs + reservationTtlMs
         ctx
           .update(DATASET_UPLOAD_SESSION_PART)
-          .set(wsIdField, wsId)
-          .set(validUntilField, java.lang.Long.valueOf(validUntil))
+          .set(lockUntilField, java.lang.Long.valueOf(validUntil))
           .where(
             DATASET_UPLOAD_SESSION_PART.UPLOAD_ID
               .eq(uploadId)
@@ -360,7 +326,7 @@ object DatasetUploadWebsocketManager extends LazyLogging {
   def broadcastUploadedParts(uploadId: String, completedParts: Int): Unit = synchronized {
     val data = objectMapper.createObjectNode()
     data.put("completedParts", completedParts)
-    broadcast(uploadId, "uploaded_parts", data, None)
+    broadcast(uploadId, "uploaded_parts", data, Some(uploadId))
   }
 
   def broadcastGoodbye(
@@ -369,20 +335,19 @@ object DatasetUploadWebsocketManager extends LazyLogging {
   ): Unit = synchronized {
     val data = objectMapper.createObjectNode()
     data.put("reason", reason)
-    broadcast(uploadId, "goodbye", data, None, closeAfter = true)
+    broadcast(uploadId, "goodbye", data, Some(uploadId), closeAfter = true)
   }
 
   private def broadcast(
       uploadId: String,
       messageType: String,
       data: ObjectNode,
-      wsIdOpt: Option[String],
+      uploadIdOpt: Option[String],
       closeAfter: Boolean = false
   ): Unit = {
     uploadIdSessions.get(uploadId).foreach { sessions =>
       sessions.foreach { session =>
-        val sessionWsId = sessionIdToWsId.get(session.getId).orElse(wsIdOpt)
-        val payload = buildEnvelope(messageType, sessionWsId, data)
+        val payload = buildEnvelope(messageType, uploadIdOpt, data)
         try {
           session.getBasicRemote.sendText(payload)
           if (closeAfter) {
@@ -403,15 +368,15 @@ object DatasetUploadWebsocketManager extends LazyLogging {
     send(session, "error", data, None)
   }
 
-  def sendNoParts(session: Session, wsId: String): Unit = {
+  def sendNoParts(session: Session, uploadId: String): Unit = {
     val data = objectMapper.createObjectNode()
     data.put("retryAfterMs", retryAfterMs)
-    send(session, "no_parts", data, Some(wsId))
+    send(session, "no_parts", data, Some(uploadId))
   }
 
   def sendParts(
       session: Session,
-      wsId: String,
+      uploadId: String,
       parts: List[(Int, Long)]
   ): Unit = {
     val data = objectMapper.createObjectNode()
@@ -423,45 +388,45 @@ object DatasetUploadWebsocketManager extends LazyLogging {
       partsArray.add(partNode)
     }
     data.set("parts", partsArray)
-    send(session, "parts", data, Some(wsId))
+    send(session, "parts", data, Some(uploadId))
   }
 
-  def sendInitAck(session: Session, wsId: String, init: InitResponse): Unit = {
+  def sendInitAck(session: Session, init: InitResponse): Unit = {
     val data = objectMapper.createObjectNode()
     data.put("resumed", init.resumed)
     data.put("completedParts", init.completedParts)
-    send(session, "init_ack", data, Some(wsId))
+    send(session, "init_ack", data, Some(init.uploadId))
   }
 
   def sendGoodbye(
       session: Session,
-      wsId: String,
+      uploadId: String,
       reason: String
   ): Unit = {
     val data = objectMapper.createObjectNode()
     data.put("reason", reason)
-    send(session, "goodbye", data, Some(wsId))
+    send(session, "goodbye", data, Some(uploadId))
   }
 
   private def send(
       session: Session,
       messageType: String,
       data: ObjectNode,
-      wsId: Option[String]
+      uploadId: Option[String]
   ): Unit = {
-    session.getBasicRemote.sendText(buildEnvelope(messageType, wsId, data))
+    session.getBasicRemote.sendText(buildEnvelope(messageType, uploadId, data))
   }
 
   private def buildEnvelope(
       messageType: String,
-      wsId: Option[String],
+      uploadId: Option[String],
       data: ObjectNode
   ): String = {
     val root = objectMapper.createObjectNode()
     root.put("type", messageType)
     root.put("v", 1)
     root.put("ts", System.currentTimeMillis())
-    wsId.foreach(root.put("wsId", _))
+    uploadId.foreach(root.put("uploadId", _))
     root.set("data", data)
     objectMapper.writeValueAsString(root)
   }
@@ -557,46 +522,25 @@ class DatasetUploadWebsocketResource extends LazyLogging {
       partSizeBytes,
       user.getUid
     )
-    val wsId = UUID.randomUUID().toString
-    DatasetUploadWebsocketManager.registerSession(session, init.uploadId, wsId)
-    DatasetUploadWebsocketManager.sendInitAck(session, wsId, init)
+    DatasetUploadWebsocketManager.registerSession(session, init.uploadId)
+    DatasetUploadWebsocketManager.sendInitAck(session, init)
   }
 
   private def handleRequestParts(session: Session, root: JsonNode): Unit = {
-    val wsId = requiredEnvelopeText(root, "wsId")
+    val uploadId = requiredEnvelopeText(root, "uploadId")
     val data = root.path("data")
     val limit = requiredInt(data, "limit")
-    if (DatasetUploadWebsocketManager.wsIdForSession(session).exists(_ != wsId)) {
-      DatasetUploadWebsocketManager.sendError(session, "UNAUTHORIZED", "wsId mismatch")
-      return
-    }
-    val uploadId = DatasetUploadWebsocketManager
-      .uploadIdForSession(session)
-      .getOrElse {
-        DatasetUploadWebsocketManager.sendError(session, "UNAUTHORIZED", "Missing upload session")
-        return
-      }
 
-    DatasetUploadWebsocketManager.reserveParts(uploadId, wsId, limit) match {
+    DatasetUploadWebsocketManager.reserveParts(uploadId, limit) match {
       case Right(parts) =>
-        DatasetUploadWebsocketManager.sendParts(session, wsId, parts)
+        DatasetUploadWebsocketManager.sendParts(session, uploadId, parts)
       case Left(_) =>
-        DatasetUploadWebsocketManager.sendNoParts(session, wsId)
+        DatasetUploadWebsocketManager.sendNoParts(session, uploadId)
     }
   }
 
   private def handleAbort(session: Session, root: JsonNode): Unit = {
-    val wsId = requiredEnvelopeText(root, "wsId")
-    if (DatasetUploadWebsocketManager.wsIdForSession(session).exists(_ != wsId)) {
-      DatasetUploadWebsocketManager.sendError(session, "UNAUTHORIZED", "wsId mismatch")
-      return
-    }
-    val uploadId = DatasetUploadWebsocketManager
-      .uploadIdForSession(session)
-      .getOrElse {
-        DatasetUploadWebsocketManager.sendError(session, "UNAUTHORIZED", "Missing upload session")
-        return
-      }
+    val uploadId = requiredEnvelopeText(root, "uploadId")
     val user = getUser(session)
     if (user == null) {
       DatasetUploadWebsocketManager.sendError(session, "UNAUTHORIZED", "Missing user")
@@ -610,7 +554,7 @@ class DatasetUploadWebsocketResource extends LazyLogging {
       if (sessionRow == null) {
         DatasetUploadWebsocketManager.sendGoodbye(
           session,
-          wsId,
+          uploadId,
           "aborted"
         )
         session.close()
@@ -642,7 +586,7 @@ class DatasetUploadWebsocketResource extends LazyLogging {
     }
     DatasetUploadWebsocketManager.sendGoodbye(
       session,
-      wsId,
+      uploadId,
       "aborted"
     )
     session.close()

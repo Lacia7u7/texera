@@ -82,8 +82,7 @@ object DatasetResource {
   private val context = SqlServer
     .getInstance()
     .createDSLContext()
-  private val wsIdField = DSL.field("ws_id", classOf[String])
-  private val validUntilField = DSL.field("valid_until_ms", classOf[java.lang.Long])
+  private val lockUntilField = DSL.field("lock_until_ms", classOf[java.lang.Long])
 
   def singleFileUploadMaxBytes(ctx: DSLContext, defaultMiB: Long = 20L): Long = {
     val limit = ctx
@@ -901,8 +900,7 @@ class DatasetResource {
         ctx
           .update(DATASET_UPLOAD_SESSION_PART)
           .set(DATASET_UPLOAD_SESSION_PART.ETAG, etagClean)
-          .set(wsIdField, null.asInstanceOf[String])
-          .set(validUntilField, null.asInstanceOf[java.lang.Long])
+          .set(lockUntilField, null.asInstanceOf[java.lang.Long])
           .where(
             DATASET_UPLOAD_SESSION_PART.UPLOAD_ID
               .eq(uploadId)
