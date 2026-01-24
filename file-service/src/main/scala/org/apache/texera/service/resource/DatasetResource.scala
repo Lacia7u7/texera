@@ -1491,7 +1491,7 @@ class DatasetResource {
     dataset
   }
 
-  private def initMultipartUpload(
+  private[resource] def initMultipartUpload(
       did: Integer,
       encodedFilePath: String,
       fileSizeBytes: Optional[java.lang.Long],
@@ -2068,67 +2068,62 @@ object DatasetUploadWebsocketManager extends LazyLogging {
     emptyUploads.foreach(uploadIdSessions.remove)
   }
 
-  def reserveParts(uploadId: String, limit: Int): Either[Long, List[(Int, Long)]] = {
-    if (limit <= 0) {
-      return Left(retryAfterMs)
-    }
-    val nowMs = System.currentTimeMillis()
-    val reserved = withTransaction(context) { ctx =>
-      ctx
-        .update(DATASET_UPLOAD_SESSION_PART)
-        .set(lockUntilField, null.asInstanceOf[java.lang.Long])
-        .where(
-          DATASET_UPLOAD_SESSION_PART.UPLOAD_ID
-            .eq(uploadId)
-            .and(DATASET_UPLOAD_SESSION_PART.ETAG.eq(""))
-            .and(lockUntilField.isNotNull)
-            .and(lockUntilField.lt(nowMs))
-        )
-        .execute()
+  import scala.jdk.CollectionConverters._
+  import org.jooq.impl.DSL
+  import org.apache.texera.dao.jooq.generated.tables.DatasetUploadSessionPart.DATASET_UPLOAD_SESSION_PART
 
-      val available =
+  def reserveParts(uploadId: String, limit: Int): Either[Long, List[(Int, Long)]] = {
+    if (limit <= 0) return Left(retryAfterMs)
+
+    val nowMs = System.currentTimeMillis()
+    val validUntil = nowMs + reservationTtlMs
+
+    val reserved: List[(Int, Long)] = withTransaction(context) { ctx =>
+      // Query 1: pick + lock rows (keeps sort)
+      val available: List[Int] =
         ctx
           .select(DATASET_UPLOAD_SESSION_PART.PART_NUMBER)
           .from(DATASET_UPLOAD_SESSION_PART)
           .where(
-            DATASET_UPLOAD_SESSION_PART.UPLOAD_ID
-              .eq(uploadId)
+            DATASET_UPLOAD_SESSION_PART.UPLOAD_ID.eq(uploadId)
               .and(DATASET_UPLOAD_SESSION_PART.ETAG.eq(""))
               .and(lockUntilField.isNull.or(lockUntilField.lt(nowMs)))
           )
-          .orderBy(DATASET_UPLOAD_SESSION_PART.PART_NUMBER.asc())
+          .orderBy(DATASET_UPLOAD_SESSION_PART.PART_NUMBER.asc()) // keep deterministic order
           .limit(limit)
           .forUpdate()
           .skipLocked()
-          .fetch(DATASET_UPLOAD_SESSION_PART.PART_NUMBER)
+          .fetch(DATASET_UPLOAD_SESSION_PART.PART_NUMBER) // <- simplifies
           .asScala
           .toList
+          .map(_.intValue())
 
-      if (available.nonEmpty) {
-        val validUntil = nowMs + reservationTtlMs
-        ctx
-          .update(DATASET_UPLOAD_SESSION_PART)
-          .set(lockUntilField, java.lang.Long.valueOf(validUntil))
-          .where(
-            DATASET_UPLOAD_SESSION_PART.UPLOAD_ID
-              .eq(uploadId)
-              .and(
-                DATASET_UPLOAD_SESSION_PART.PART_NUMBER
-                  .in(available.asJava)
-              )
+      if (available.isEmpty) Nil
+      else {
+        // Query 2: reserve exactly those locked rows (no extra predicates needed)
+        val updated =
+          ctx
+            .update(DATASET_UPLOAD_SESSION_PART)
+            .set(lockUntilField, java.lang.Long.valueOf(validUntil))
+            .where(
+              DATASET_UPLOAD_SESSION_PART.UPLOAD_ID.eq(uploadId)
+                .and(DATASET_UPLOAD_SESSION_PART.PART_NUMBER.in(available.map(Int.box).asJava))
+            )
+            .execute()
+
+        // Should match because Query 1 row-locks these rows in the same txn.
+        if (updated != available.size) {
+          throw new IllegalStateException(
+            s"Reserved parts mismatch: selected=${available.size}, updated=$updated"
           )
-          .execute()
-        available.map(partNumber => (partNumber.intValue(), validUntil))
-      } else {
-        List.empty[(Int, Long)]
+        }
+
+        // Already sorted due to Query 1 ordering
+        available.map(pn => (pn, validUntil))
       }
     }
 
-    if (reserved.isEmpty) {
-      Left(retryAfterMs)
-    } else {
-      Right(reserved)
-    }
+    if (reserved.isEmpty) Left(retryAfterMs) else Right(reserved)
   }
 
   def initOrResumeUpload(
