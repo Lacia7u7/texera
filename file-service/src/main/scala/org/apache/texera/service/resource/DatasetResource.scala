@@ -57,6 +57,7 @@ import org.apache.texera.service.`type`.DatasetFileNode
 import org.apache.texera.service.resource.DatasetAccessResource._
 import org.apache.texera.service.resource.DatasetResource.{context, _}
 import org.apache.texera.service.util.S3StorageClient
+import org.apache.texera.service.util.S3StorageClient
 import org.apache.texera.service.util.S3StorageClient.{
   MAXIMUM_NUM_OF_MULTIPART_S3_PARTS,
   MINIMUM_NUM_OF_MULTIPART_S3_PART
@@ -915,7 +916,7 @@ class DatasetResource {
               .and(DATASET_UPLOAD_SESSION_PART.PART_NUMBER.eq(partNumber))
           )
           .execute()
-        DatasetUploadWebsocketManager.notifyPartUploaded(uploadId, partNumber)
+        ()
       }
       Response.ok().build()
     }
@@ -2175,144 +2176,43 @@ object DatasetUploadWebsocketManager extends LazyLogging {
           resumed = true
         )
       } else {
-        if (fileSizeBytes <= 0L) {
-          throw new BadRequestException("fileSizeBytes must be > 0")
-        }
-        if (partSizeBytes <= 0L) {
-          throw new BadRequestException("partSizeBytes must be > 0")
-        }
-
-        val totalMaxBytes: Long = DatasetResource.singleFileUploadMaxBytes(ctx)
-        if (totalMaxBytes <= 0L) {
-          throw new WebApplicationException(
-            "singleFileUploadMaxBytes must be > 0",
-            Response.Status.INTERNAL_SERVER_ERROR
+        new DatasetResource()
+          .initMultipartUpload(
+            did,
+            filePathRaw,
+            Optional.of(java.lang.Long.valueOf(fileSizeBytes)),
+            Optional.of(java.lang.Long.valueOf(partSizeBytes)),
+            uid
           )
-        }
-        if (fileSizeBytes > totalMaxBytes) {
-          throw new BadRequestException(
-            s"fileSizeBytes=$fileSizeBytes exceeds singleFileUploadMaxBytes=$totalMaxBytes"
-          )
-        }
-
-        val addend: Long = partSizeBytes - 1L
-        if (addend < 0L || fileSizeBytes > Long.MaxValue - addend) {
-          throw new WebApplicationException(
-            "Overflow while computing numParts",
-            Response.Status.INTERNAL_SERVER_ERROR
-          )
-        }
-
-        val numPartsLong: Long = (fileSizeBytes + addend) / partSizeBytes
-        if (numPartsLong < 1L || numPartsLong > MAXIMUM_NUM_OF_MULTIPART_S3_PARTS.toLong) {
-          throw new BadRequestException(
-            s"Computed numParts=$numPartsLong is out of range 1..$MAXIMUM_NUM_OF_MULTIPART_S3_PARTS"
-          )
-        }
-        val numPartsValue: Int = numPartsLong.toInt
-
-        if (numPartsValue > 1 && partSizeBytes < MINIMUM_NUM_OF_MULTIPART_S3_PART) {
-          throw new BadRequestException(
-            s"partSizeBytes=$partSizeBytes is too small. " +
-              s"All non-final parts must be >= $MINIMUM_NUM_OF_MULTIPART_S3_PART bytes."
-          )
-        }
-
-        val presign = LakeFSStorageClient.initiatePresignedMultipartUploads(
-          dataset.getRepositoryName,
-          filePath,
-          numPartsValue
-        )
-
-        val uploadIdStr = presign.getUploadId
-        val physicalAddr = presign.getPhysicalAddress
-
-        try {
-          val rowsInserted = ctx
-            .insertInto(DATASET_UPLOAD_SESSION)
-            .set(DATASET_UPLOAD_SESSION.FILE_PATH, filePath)
-            .set(DATASET_UPLOAD_SESSION.DID, did)
-            .set(DATASET_UPLOAD_SESSION.UID, uid)
-            .set(DATASET_UPLOAD_SESSION.UPLOAD_ID, uploadIdStr)
-            .set(DATASET_UPLOAD_SESSION.PHYSICAL_ADDRESS, physicalAddr)
-            .set(DATASET_UPLOAD_SESSION.NUM_PARTS_REQUESTED, Integer.valueOf(numPartsValue))
-            .set(DATASET_UPLOAD_SESSION.FILE_SIZE_BYTES, java.lang.Long.valueOf(fileSizeBytes))
-            .set(DATASET_UPLOAD_SESSION.PART_SIZE_BYTES, java.lang.Long.valueOf(partSizeBytes))
-            .onDuplicateKeyIgnore()
-            .execute()
-
-          if (rowsInserted != 1) {
-            LakeFSStorageClient.abortPresignedMultipartUploads(
-              dataset.getRepositoryName,
-              filePath,
-              uploadIdStr,
-              physicalAddr
-            )
-            throw new WebApplicationException(
-              "Upload already in progress for this filePath",
-              Response.Status.CONFLICT
-            )
-          }
-
-          val partNumberSeries = DSL.generateSeries(1, numPartsValue).asTable("gs", "pn")
-          val partNumberField = partNumberSeries.field("pn", classOf[Integer])
-
+        val created =
           ctx
-            .insertInto(
-              DATASET_UPLOAD_SESSION_PART,
-              DATASET_UPLOAD_SESSION_PART.UPLOAD_ID,
-              DATASET_UPLOAD_SESSION_PART.PART_NUMBER,
-              DATASET_UPLOAD_SESSION_PART.ETAG
+            .selectFrom(DATASET_UPLOAD_SESSION)
+            .where(
+              DATASET_UPLOAD_SESSION.UID
+                .eq(uid)
+                .and(DATASET_UPLOAD_SESSION.DID.eq(did))
+                .and(DATASET_UPLOAD_SESSION.FILE_PATH.eq(filePath))
             )
-            .select(
-              ctx
-                .select(
-                  inl(uploadIdStr),
-                  partNumberField,
-                  inl("")
-                )
-                .from(partNumberSeries)
-            )
-            .execute()
-
-          InitResponse(
-            uploadId = uploadIdStr,
-            completedParts = 0,
-            resumed = false
+            .fetchOne()
+        if (created == null) {
+          throw new WebApplicationException(
+            "Upload session not created for filePath",
+            Response.Status.INTERNAL_SERVER_ERROR
           )
-        } catch {
-          case e: Exception =>
-            try {
-              LakeFSStorageClient.abortPresignedMultipartUploads(
-                dataset.getRepositoryName,
-                filePath,
-                uploadIdStr,
-                physicalAddr
-              )
-            } catch { case _: Throwable => () }
-            throw e
         }
+        InitResponse(
+          uploadId = created.getUploadId,
+          completedParts = 0,
+          resumed = false
+        )
       }
     }
   }
 
-  def notifyPartUploaded(uploadId: String, partNumber: Int): Unit = {
+  def countCompletedParts(uploadId: String): Int = {
     withTransaction(context) { ctx =>
-      val session = ctx
-        .selectFrom(DATASET_UPLOAD_SESSION)
-        .where(DATASET_UPLOAD_SESSION.UPLOAD_ID.eq(uploadId))
-        .fetchOne()
-      if (session != null) {
-        val completedParts = countCompletedParts(ctx, uploadId)
-        broadcastUploadedParts(uploadId, completedParts)
-      }
+      countCompletedParts(ctx, uploadId)
     }
-  }
-
-  def broadcastUploadedParts(uploadId: String, completedParts: Int): Unit = synchronized {
-    val data = objectMapper.createObjectNode()
-    data.put("completedParts", completedParts)
-    broadcast(uploadId, "uploaded_parts", data)
   }
 
   def broadcastGoodbye(
@@ -2361,7 +2261,8 @@ object DatasetUploadWebsocketManager extends LazyLogging {
 
   def sendParts(
       session: Session,
-      parts: List[(Int, Long)]
+      parts: List[(Int, Long)],
+      completedParts: Int
   ): Unit = {
     val data = objectMapper.createObjectNode()
     val partsArray = objectMapper.createArrayNode()
@@ -2372,6 +2273,7 @@ object DatasetUploadWebsocketManager extends LazyLogging {
       partsArray.add(partNode)
     }
     data.set("parts", partsArray)
+    data.put("completedParts", completedParts)
     send(session, "parts", data)
   }
 
@@ -2445,8 +2347,6 @@ object DatasetUploadWebsocketManager extends LazyLogging {
 
 @ServerEndpoint(value = "/wsapi/dataset-upload")
 class DatasetUploadWebsocketResource extends LazyLogging {
-  private val objectMapper = JSONUtils.objectMapper
-
   @OnOpen
   def onOpen(session: Session): Unit = {
     logger.debug(s"Dataset upload websocket opened: ${session.getId}")
@@ -2461,7 +2361,7 @@ class DatasetUploadWebsocketResource extends LazyLogging {
   @OnMessage
   def onMessage(session: Session, message: String): Unit = {
     try {
-      val root = objectMapper.readTree(message)
+      val root = JSONUtils.objectMapper.readTree(message)
       val messageType = root.path("type").asText("")
       messageType match {
         case "init" =>
@@ -2531,7 +2431,8 @@ class DatasetUploadWebsocketResource extends LazyLogging {
 
     DatasetUploadWebsocketManager.reserveParts(uploadId, limit) match {
       case Right(parts) =>
-        DatasetUploadWebsocketManager.sendParts(session, parts)
+        val completedParts = DatasetUploadWebsocketManager.countCompletedParts(uploadId)
+        DatasetUploadWebsocketManager.sendParts(session, parts, completedParts)
       case Left(_) =>
         DatasetUploadWebsocketManager.sendNoParts(session)
     }

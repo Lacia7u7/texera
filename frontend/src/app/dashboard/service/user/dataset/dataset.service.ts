@@ -424,6 +424,7 @@ export class DatasetService {
           }
           case "parts": {
             const parts = message.data?.parts ?? [];
+            completedParts = message.data?.completedParts ?? completedParts;
             parts.forEach((part: { partNumber: number }) => {
               startPartUpload(part.partNumber);
             });
@@ -435,14 +436,6 @@ export class DatasetService {
               window.clearTimeout(noPartsTimer);
             }
             noPartsTimer = window.setTimeout(() => requestParts(), retryAfterMs);
-            break;
-          }
-          case "uploaded_parts": {
-            completedParts = message.data?.completedParts ?? completedParts;
-            emitProgress("uploading");
-            if (completedParts >= totalParts) {
-              finishUpload();
-            }
             break;
           }
           case "ping": {
