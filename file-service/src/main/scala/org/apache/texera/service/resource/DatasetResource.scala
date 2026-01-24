@@ -1828,9 +1828,7 @@ class DatasetResource {
 
       DatasetUploadWebsocketManager.broadcastGoodbye(
         uploadId,
-        "finished",
-        Some(actualSizeBytes),
-        Some(100)
+        "finished"
       )
 
       Response
@@ -1917,9 +1915,7 @@ class DatasetResource {
 
       DatasetUploadWebsocketManager.broadcastGoodbye(
         session.getUploadId,
-        "aborted",
-        None,
-        None
+        "aborted"
       )
 
       Response.ok(Map("message" -> "Multipart upload aborted successfully")).build()

@@ -166,13 +166,13 @@ export class DatasetService {
       let lastETA = 0;
       let lastUpdateTime = 0;
       let inFlight = 0;
-      let uploadId: string | null = null;
       let wsId: string | null = null;
       let concurrency = concurrencyLimit;
-      let serverPercentage = 0;
+      let completedParts = 0;
       let finishRequested = false;
       let closed = false;
       let noPartsTimer: number | null = null;
+      const totalParts = Math.max(1, Math.ceil(file.size / partSize));
 
       const lastStats = {
         uploadSpeed: 0,
@@ -188,6 +188,17 @@ export class DatasetService {
           totalUploaded += bytes;
         });
         return totalUploaded;
+      };
+
+      const getServerCompletedBytes = () => {
+        const normalizedCompleted = Math.min(completedParts, totalParts);
+        if (normalizedCompleted <= 0) {
+          return 0;
+        }
+        if (normalizedCompleted >= totalParts) {
+          return file.size;
+        }
+        return normalizedCompleted * partSize;
       };
 
       const calculateStats = (totalUploaded: number) => {
@@ -241,9 +252,8 @@ export class DatasetService {
       };
 
       const websocketBaseUrl = getWebsocketUrl("wsapi/dataset-upload", "");
-      const token = AuthService.getAccessToken();
-      const websocketUrl = token ? `${websocketBaseUrl}?access-token=${token}` : websocketBaseUrl;
-      const websocket = new WebSocket(websocketUrl);
+      const websocket = new WebSocket(websocketBaseUrl);
+      const accessToken = AuthService.getAccessToken();
 
       const sendMessage = (type: string, data: Record<string, unknown>, includeIds = true) => {
         const payload: Record<string, unknown> = {
@@ -252,9 +262,6 @@ export class DatasetService {
           ts: Date.now(),
           data,
         };
-        if (includeIds && uploadId) {
-          payload.uploadId = uploadId;
-        }
         if (includeIds && wsId) {
           payload.wsId = wsId;
         }
@@ -264,17 +271,19 @@ export class DatasetService {
       };
 
       const emitProgress = (status: MultipartUploadProgress["status"]) => {
-        const stats = calculateStats(getLocalUploadedBytes());
+        const totalUploaded = getServerCompletedBytes() + getLocalUploadedBytes();
+        const stats = calculateStats(totalUploaded);
+        const percentage = file.size > 0 ? Math.min(100, (totalUploaded / file.size) * 100) : 0;
         observer.next({
           filePath,
-          percentage: serverPercentage,
+          percentage,
           status,
           ...stats,
         });
       };
 
       const requestParts = () => {
-        if (!uploadId || !wsId || closed) return;
+        if (!wsId || closed) return;
         const freeSlots = concurrency - inFlight;
         if (freeSlots > 0) {
           sendMessage("request_parts", { limit: freeSlots });
@@ -299,7 +308,7 @@ export class DatasetService {
       const handleError = (error: Error) => {
         if (closed) return;
         emitProgress("aborted");
-        if (uploadId && wsId) {
+        if (wsId) {
           sendMessage("abort", { reason: "error" });
         }
         observer.error(error);
@@ -330,7 +339,7 @@ export class DatasetService {
           xhrs.delete(partNumber);
 
           if (xhr.status === 200 || xhr.status === 204) {
-            partProgress.set(partNumber, chunk.size);
+            partProgress.delete(partNumber);
             lastUpdateTime = 0;
             emitProgress("uploading");
             requestParts();
@@ -381,7 +390,7 @@ export class DatasetService {
             xhr.abort();
           } catch {}
         });
-        if (sendAbort && uploadId && wsId && websocket.readyState === WebSocket.OPEN) {
+        if (sendAbort && wsId && websocket.readyState === WebSocket.OPEN) {
           sendMessage("abort", { reason: "client" });
         }
         if (websocket.readyState === WebSocket.OPEN || websocket.readyState === WebSocket.CONNECTING) {
@@ -398,8 +407,7 @@ export class DatasetService {
             filePath,
             fileSizeBytes: file.size,
             partSizeBytes: partSize,
-            concurrency: concurrencyLimit,
-            browserId: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+            accessToken: accessToken ?? undefined,
           },
           false
         );
@@ -409,13 +417,12 @@ export class DatasetService {
         const message = JSON.parse(event.data);
         switch (message.type) {
           case "init_ack": {
-            uploadId = message.uploadId;
             wsId = message.wsId;
-            concurrency = message.data?.concurrencyAccepted ?? concurrencyLimit;
-            serverPercentage = message.data?.percentage ?? 0;
+            completedParts = message.data?.completedParts ?? 0;
+            concurrency = concurrencyLimit;
             observer.next({
               filePath,
-              percentage: serverPercentage,
+              percentage: file.size > 0 ? Math.min(100, (getServerCompletedBytes() / file.size) * 100) : 0,
               status: "initializing",
               uploadSpeed: 0,
               estimatedTimeRemaining: 0,
@@ -440,9 +447,9 @@ export class DatasetService {
             break;
           }
           case "uploaded_parts": {
-            serverPercentage = message.data?.percentage ?? serverPercentage;
+            completedParts = message.data?.completedParts ?? completedParts;
             emitProgress("uploading");
-            if (serverPercentage >= 100) {
+            if (completedParts >= totalParts) {
               finishUpload();
             }
             break;
@@ -452,11 +459,10 @@ export class DatasetService {
             break;
           }
           case "goodbye": {
-            serverPercentage = message.data?.percentage ?? serverPercentage;
             if (message.data?.reason === "finished") {
               observer.next({
                 filePath,
-                percentage: serverPercentage,
+                percentage: 100,
                 status: "finished",
                 uploadSpeed: 0,
                 estimatedTimeRemaining: 0,
@@ -466,7 +472,7 @@ export class DatasetService {
             } else {
               observer.next({
                 filePath,
-                percentage: serverPercentage,
+                percentage: file.size > 0 ? Math.min(100, (getServerCompletedBytes() / file.size) * 100) : 0,
                 status: "aborted",
                 uploadSpeed: 0,
                 estimatedTimeRemaining: 0,
