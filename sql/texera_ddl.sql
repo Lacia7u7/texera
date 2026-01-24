@@ -313,8 +313,7 @@ CREATE TABLE IF NOT EXISTS dataset_upload_session_part
     upload_id   VARCHAR(256) NOT NULL,
     part_number INT          NOT NULL,
     etag        TEXT         NOT NULL DEFAULT '',
-    ws_id       VARCHAR(128),
-    valid_until_ms BIGINT,
+    lock_until_ms BIGINT,
 
     PRIMARY KEY (upload_id, part_number),
 
