@@ -326,7 +326,7 @@ object DatasetUploadWebsocketManager extends LazyLogging {
   def broadcastUploadedParts(uploadId: String, completedParts: Int): Unit = synchronized {
     val data = objectMapper.createObjectNode()
     data.put("completedParts", completedParts)
-    broadcast(uploadId, "uploaded_parts", data, Some(uploadId))
+    broadcast(uploadId, "uploaded_parts", data)
   }
 
   def broadcastGoodbye(
@@ -335,19 +335,18 @@ object DatasetUploadWebsocketManager extends LazyLogging {
   ): Unit = synchronized {
     val data = objectMapper.createObjectNode()
     data.put("reason", reason)
-    broadcast(uploadId, "goodbye", data, Some(uploadId), closeAfter = true)
+    broadcast(uploadId, "goodbye", data, closeAfter = true)
   }
 
   private def broadcast(
       uploadId: String,
       messageType: String,
       data: ObjectNode,
-      uploadIdOpt: Option[String],
       closeAfter: Boolean = false
   ): Unit = {
     uploadIdSessions.get(uploadId).foreach { sessions =>
       sessions.foreach { session =>
-        val payload = buildEnvelope(messageType, uploadIdOpt, data)
+        val payload = buildEnvelope(messageType, data)
         try {
           session.getBasicRemote.sendText(payload)
           if (closeAfter) {
@@ -365,18 +364,17 @@ object DatasetUploadWebsocketManager extends LazyLogging {
     val data = objectMapper.createObjectNode()
     data.put("code", code)
     data.put("message", message)
-    send(session, "error", data, None)
+    send(session, "error", data)
   }
 
-  def sendNoParts(session: Session, uploadId: String): Unit = {
+  def sendNoParts(session: Session): Unit = {
     val data = objectMapper.createObjectNode()
     data.put("retryAfterMs", retryAfterMs)
-    send(session, "no_parts", data, Some(uploadId))
+    send(session, "no_parts", data)
   }
 
   def sendParts(
       session: Session,
-      uploadId: String,
       parts: List[(Int, Long)]
   ): Unit = {
     val data = objectMapper.createObjectNode()
@@ -388,50 +386,46 @@ object DatasetUploadWebsocketManager extends LazyLogging {
       partsArray.add(partNode)
     }
     data.set("parts", partsArray)
-    send(session, "parts", data, Some(uploadId))
+    send(session, "parts", data)
   }
 
   def sendInitAck(session: Session, init: InitResponse): Unit = {
     val data = objectMapper.createObjectNode()
     data.put("resumed", init.resumed)
     data.put("completedParts", init.completedParts)
-    send(session, "init_ack", data, Some(init.uploadId))
+    send(session, "init_ack", data)
   }
 
   def sendGoodbye(
       session: Session,
-      uploadId: String,
       reason: String
   ): Unit = {
     val data = objectMapper.createObjectNode()
     data.put("reason", reason)
-    send(session, "goodbye", data, Some(uploadId))
+    send(session, "goodbye", data)
   }
 
   private def send(
       session: Session,
       messageType: String,
-      data: ObjectNode,
-      uploadId: Option[String]
+      data: ObjectNode
   ): Unit = {
-    session.getBasicRemote.sendText(buildEnvelope(messageType, uploadId, data))
+    session.getBasicRemote.sendText(buildEnvelope(messageType, data))
   }
 
   private def buildEnvelope(
       messageType: String,
-      uploadId: Option[String],
       data: ObjectNode
   ): String = {
     val root = objectMapper.createObjectNode()
     root.put("type", messageType)
     root.put("v", 1)
     root.put("ts", System.currentTimeMillis())
-    uploadId.foreach(root.put("uploadId", _))
     root.set("data", data)
     objectMapper.writeValueAsString(root)
   }
 
-  private def fetchDatasetBy(ctx: org.jooq.DSLContext, ownerEmail: String, datasetName: String): Dataset = {
+  def fetchDatasetBy(ctx: org.jooq.DSLContext, ownerEmail: String, datasetName: String): Dataset = {
     val dataset = ctx
       .select(DATASET.fields: _*)
       .from(DATASET)
@@ -527,34 +521,67 @@ class DatasetUploadWebsocketResource extends LazyLogging {
   }
 
   private def handleRequestParts(session: Session, root: JsonNode): Unit = {
-    val uploadId = requiredEnvelopeText(root, "uploadId")
     val data = root.path("data")
+    val ownerEmail = requiredText(data, "ownerEmail")
+    val datasetName = requiredText(data, "datasetName")
+    val filePath = requiredText(data, "filePath")
     val limit = requiredInt(data, "limit")
 
-    DatasetUploadWebsocketManager.reserveParts(uploadId, limit) match {
-      case Right(parts) =>
-        DatasetUploadWebsocketManager.sendParts(session, uploadId, parts)
-      case Left(_) =>
-        DatasetUploadWebsocketManager.sendNoParts(session, uploadId)
-    }
-  }
-
-  private def handleAbort(session: Session, root: JsonNode): Unit = {
-    val uploadId = requiredEnvelopeText(root, "uploadId")
     val user = getUser(session)
     if (user == null) {
       DatasetUploadWebsocketManager.sendError(session, "UNAUTHORIZED", "Missing user")
       return
     }
+
+    val uploadId =
+      resolveUploadId(ownerEmail, datasetName, filePath, user.getUid).getOrElse {
+        DatasetUploadWebsocketManager.sendError(
+          session,
+          "NOT_FOUND",
+          "Upload session not found for filePath"
+        )
+        return
+      }
+
+    DatasetUploadWebsocketManager.reserveParts(uploadId, limit) match {
+      case Right(parts) =>
+        DatasetUploadWebsocketManager.sendParts(session, parts)
+      case Left(_) =>
+        DatasetUploadWebsocketManager.sendNoParts(session)
+    }
+  }
+
+  private def handleAbort(session: Session, root: JsonNode): Unit = {
+    val data = root.path("data")
+    val ownerEmail = requiredText(data, "ownerEmail")
+    val datasetName = requiredText(data, "datasetName")
+    val filePathRaw = requiredText(data, "filePath")
+    val user = getUser(session)
+    if (user == null) {
+      DatasetUploadWebsocketManager.sendError(session, "UNAUTHORIZED", "Missing user")
+      return
+    }
+    val filePath = validateAndNormalizeFilePathOrThrow(
+      URLDecoder.decode(filePathRaw, StandardCharsets.UTF_8.name())
+    )
     withTransaction(SqlServer.getInstance().createDSLContext()) { ctx =>
+      val dataset = DatasetUploadWebsocketManager.fetchDatasetBy(ctx, ownerEmail, datasetName)
+      val did = dataset.getDid
+      if (!userHasWriteAccess(ctx, did, user.getUid)) {
+        throw new ForbiddenException("User has no access to this dataset")
+      }
       val sessionRow = ctx
         .selectFrom(DATASET_UPLOAD_SESSION)
-        .where(DATASET_UPLOAD_SESSION.UPLOAD_ID.eq(uploadId))
+        .where(
+          DATASET_UPLOAD_SESSION.UID
+            .eq(user.getUid)
+            .and(DATASET_UPLOAD_SESSION.DID.eq(did))
+            .and(DATASET_UPLOAD_SESSION.FILE_PATH.eq(filePath))
+        )
         .fetchOne()
       if (sessionRow == null) {
         DatasetUploadWebsocketManager.sendGoodbye(
           session,
-          uploadId,
           "aborted"
         )
         session.close()
@@ -563,19 +590,14 @@ class DatasetUploadWebsocketResource extends LazyLogging {
       if (sessionRow.getUid != user.getUid) {
         throw new ForbiddenException("User has no access to this upload session")
       }
-      val dataset =
-        ctx
-          .select(DATASET.fields: _*)
-          .from(DATASET)
-          .where(DATASET.DID.eq(sessionRow.getDid))
-          .fetchOneInto(classOf[Dataset])
+      val uploadId = sessionRow.getUploadId
       val filePath = sessionRow.getFilePath
       val physicalAddr = Option(sessionRow.getPhysicalAddress).map(_.trim).getOrElse("")
       if (dataset != null && physicalAddr.nonEmpty) {
         LakeFSStorageClient.abortPresignedMultipartUploads(
           dataset.getRepositoryName,
           filePath,
-          sessionRow.getUploadId,
+          uploadId,
           physicalAddr
         )
       }
@@ -586,7 +608,6 @@ class DatasetUploadWebsocketResource extends LazyLogging {
     }
     DatasetUploadWebsocketManager.sendGoodbye(
       session,
-      uploadId,
       "aborted"
     )
     session.close()
@@ -625,15 +646,36 @@ class DatasetUploadWebsocketResource extends LazyLogging {
     user
   }
 
-  private def requiredText(node: JsonNode, field: String): String = {
-    val value = node.path(field).asText("").trim
-    if (value.isEmpty) {
-      throw new BadRequestException(s"$field is required")
+  private def resolveUploadId(
+      ownerEmail: String,
+      datasetName: String,
+      filePathRaw: String,
+      uid: Integer
+  ): Option[String] = {
+    val filePath = validateAndNormalizeFilePathOrThrow(
+      URLDecoder.decode(filePathRaw, StandardCharsets.UTF_8.name())
+    )
+    withTransaction(SqlServer.getInstance().createDSLContext()) { ctx =>
+      val dataset = DatasetUploadWebsocketManager.fetchDatasetBy(ctx, ownerEmail, datasetName)
+      val did = dataset.getDid
+      if (!userHasWriteAccess(ctx, did, uid)) {
+        throw new ForbiddenException("User has no access to this dataset")
+      }
+      val sessionRow =
+        ctx
+          .selectFrom(DATASET_UPLOAD_SESSION)
+          .where(
+            DATASET_UPLOAD_SESSION.UID
+              .eq(uid)
+              .and(DATASET_UPLOAD_SESSION.DID.eq(did))
+              .and(DATASET_UPLOAD_SESSION.FILE_PATH.eq(filePath))
+          )
+          .fetchOne()
+      Option(sessionRow).map(_.getUploadId)
     }
-    value
   }
 
-  private def requiredEnvelopeText(node: JsonNode, field: String): String = {
+  private def requiredText(node: JsonNode, field: String): String = {
     val value = node.path(field).asText("").trim
     if (value.isEmpty) {
       throw new BadRequestException(s"$field is required")
