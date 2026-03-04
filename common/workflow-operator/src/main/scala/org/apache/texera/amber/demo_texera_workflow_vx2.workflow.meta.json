@@ -1,0 +1,398 @@
+{
+  "entry": "main",
+  "catalog_path": "catalog.json",
+  "stages": [
+    {
+      "stage_id": "extract_data__0",
+      "function": "extract_data",
+      "operatorID": "CSVFileScan-operator-52a5c4c1-6d4c-4ce6-8d58-c69e991b2b15",
+      "operator_type": "CSVFileScan",
+      "native_operator_type": "CSVFileScan",
+      "family": "table",
+      "base_class": null,
+      "method": null,
+      "is_source": true,
+      "is_sink": true,
+      "recursive": false,
+      "has_loop": false,
+      "assigned_to": [
+        "raw_df"
+      ],
+      "data_inputs": [],
+      "ui_parameters": [
+        {
+          "name": "url",
+          "attr_type": "AttributeType.STRING",
+          "default": "'https://raw.githubusercontent.com/vega/vega-datasets/main/data/sp500-2000.csv'"
+        }
+      ],
+      "source_columns": [
+        {
+          "attributeName": "date",
+          "attributeType": "string"
+        },
+        {
+          "attributeName": "open",
+          "attributeType": "double"
+        },
+        {
+          "attributeName": "high",
+          "attributeType": "double"
+        },
+        {
+          "attributeName": "low",
+          "attributeType": "double"
+        },
+        {
+          "attributeName": "close",
+          "attributeType": "double"
+        },
+        {
+          "attributeName": "adjclose",
+          "attributeType": "double"
+        },
+        {
+          "attributeName": "volume",
+          "attributeType": "long"
+        }
+      ],
+      "output_columns": [
+        {
+          "attributeName": "date",
+          "attributeType": "string"
+        },
+        {
+          "attributeName": "open",
+          "attributeType": "double"
+        },
+        {
+          "attributeName": "high",
+          "attributeType": "double"
+        },
+        {
+          "attributeName": "low",
+          "attributeType": "double"
+        },
+        {
+          "attributeName": "close",
+          "attributeType": "double"
+        },
+        {
+          "attributeName": "adjclose",
+          "attributeType": "double"
+        },
+        {
+          "attributeName": "volume",
+          "attributeType": "long"
+        }
+      ],
+      "retain_input_columns": false,
+      "native_notes": [
+        "Matched pandas.read_csv to CSVFileScan"
+      ]
+    },
+    {
+      "stage_id": "select_columns__1",
+      "function": "select_columns",
+      "operatorID": "PythonUDFV2-operator-da9d7c0b-301c-4074-9fe4-262c29fd2b34",
+      "operator_type": "PythonUDFV2",
+      "native_operator_type": null,
+      "family": "table",
+      "base_class": "UDFTableOperator",
+      "method": "process_table",
+      "is_source": false,
+      "is_sink": true,
+      "recursive": false,
+      "has_loop": false,
+      "assigned_to": [
+        "selected_df"
+      ],
+      "data_inputs": [
+        {
+          "param_name": "df",
+          "upstream_stage_id": "extract_data__0",
+          "upstream_var": "raw_df",
+          "input_port": 0
+        }
+      ],
+      "ui_parameters": [],
+      "source_columns": [],
+      "output_columns": [
+        {
+          "attributeName": "date",
+          "attributeType": "string"
+        },
+        {
+          "attributeName": "open",
+          "attributeType": "double"
+        },
+        {
+          "attributeName": "high",
+          "attributeType": "double"
+        },
+        {
+          "attributeName": "low",
+          "attributeType": "double"
+        },
+        {
+          "attributeName": "close",
+          "attributeType": "double"
+        },
+        {
+          "attributeName": "volume",
+          "attributeType": "long"
+        }
+      ],
+      "retain_input_columns": false,
+      "native_notes": []
+    },
+    {
+      "stage_id": "clean_data__2",
+      "function": "clean_data",
+      "operatorID": "PythonUDFV2-operator-9763cabd-b5c1-46ca-97de-7de4796f11bf",
+      "operator_type": "PythonUDFV2",
+      "native_operator_type": null,
+      "family": "table",
+      "base_class": "UDFTableOperator",
+      "method": "process_table",
+      "is_source": false,
+      "is_sink": true,
+      "recursive": false,
+      "has_loop": false,
+      "assigned_to": [
+        "cleaned_df"
+      ],
+      "data_inputs": [
+        {
+          "param_name": "df",
+          "upstream_stage_id": "select_columns__1",
+          "upstream_var": "selected_df",
+          "input_port": 0
+        }
+      ],
+      "ui_parameters": [],
+      "source_columns": [],
+      "output_columns": [
+        {
+          "attributeName": "date",
+          "attributeType": "string"
+        },
+        {
+          "attributeName": "open",
+          "attributeType": "double"
+        },
+        {
+          "attributeName": "high",
+          "attributeType": "double"
+        },
+        {
+          "attributeName": "low",
+          "attributeType": "double"
+        },
+        {
+          "attributeName": "close",
+          "attributeType": "double"
+        },
+        {
+          "attributeName": "volume",
+          "attributeType": "long"
+        }
+      ],
+      "retain_input_columns": false,
+      "native_notes": []
+    },
+    {
+      "stage_id": "transform_data__3",
+      "function": "transform_data",
+      "operatorID": "PythonUDFV2-operator-cdae744a-1e5e-4e8f-bd77-10434620f798",
+      "operator_type": "PythonUDFV2",
+      "native_operator_type": null,
+      "family": "table",
+      "base_class": "UDFTableOperator",
+      "method": "process_table",
+      "is_source": false,
+      "is_sink": true,
+      "recursive": false,
+      "has_loop": false,
+      "assigned_to": [
+        "transformed_df"
+      ],
+      "data_inputs": [
+        {
+          "param_name": "df",
+          "upstream_stage_id": "clean_data__2",
+          "upstream_var": "cleaned_df",
+          "input_port": 0
+        }
+      ],
+      "ui_parameters": [],
+      "source_columns": [],
+      "output_columns": [
+        {
+          "attributeName": "date",
+          "attributeType": "timestamp"
+        },
+        {
+          "attributeName": "open",
+          "attributeType": "double"
+        },
+        {
+          "attributeName": "high",
+          "attributeType": "double"
+        },
+        {
+          "attributeName": "low",
+          "attributeType": "double"
+        },
+        {
+          "attributeName": "close",
+          "attributeType": "double"
+        },
+        {
+          "attributeName": "volume",
+          "attributeType": "long"
+        },
+        {
+          "attributeName": "daily_return",
+          "attributeType": "double"
+        },
+        {
+          "attributeName": "ma_30",
+          "attributeType": "double"
+        }
+      ],
+      "retain_input_columns": false,
+      "native_notes": []
+    },
+    {
+      "stage_id": "load_data__4",
+      "function": "load_data",
+      "operatorID": "PythonUDFV2-operator-f45cfd8f-0f39-42c6-a97a-35a0094359da",
+      "operator_type": "PythonUDFV2",
+      "native_operator_type": null,
+      "family": "table",
+      "base_class": "UDFTableOperator",
+      "method": "process_table",
+      "is_source": false,
+      "is_sink": true,
+      "recursive": false,
+      "has_loop": false,
+      "assigned_to": [],
+      "data_inputs": [
+        {
+          "param_name": "df",
+          "upstream_stage_id": "transform_data__3",
+          "upstream_var": "transformed_df",
+          "input_port": 0
+        }
+      ],
+      "ui_parameters": [
+        {
+          "name": "output_file",
+          "attr_type": "AttributeType.STRING",
+          "default": "'clean_sp500_2000.csv'"
+        }
+      ],
+      "source_columns": [],
+      "output_columns": [
+        {
+          "attributeName": "date",
+          "attributeType": "timestamp"
+        },
+        {
+          "attributeName": "open",
+          "attributeType": "double"
+        },
+        {
+          "attributeName": "high",
+          "attributeType": "double"
+        },
+        {
+          "attributeName": "low",
+          "attributeType": "double"
+        },
+        {
+          "attributeName": "close",
+          "attributeType": "double"
+        },
+        {
+          "attributeName": "volume",
+          "attributeType": "long"
+        },
+        {
+          "attributeName": "daily_return",
+          "attributeType": "double"
+        },
+        {
+          "attributeName": "ma_30",
+          "attributeType": "double"
+        }
+      ],
+      "retain_input_columns": false,
+      "native_notes": []
+    },
+    {
+      "stage_id": "plot_data__5",
+      "function": "plot_data",
+      "operatorID": "TimeSeriesPlot-operator-4c61e814-c060-4a03-8170-2bd0c441ac8e",
+      "operator_type": "TimeSeriesPlot",
+      "native_operator_type": "TimeSeriesPlot",
+      "family": "table",
+      "base_class": null,
+      "method": null,
+      "is_source": false,
+      "is_sink": true,
+      "recursive": false,
+      "has_loop": false,
+      "assigned_to": [],
+      "data_inputs": [
+        {
+          "param_name": "df",
+          "upstream_stage_id": "transform_data__3",
+          "upstream_var": "transformed_df",
+          "input_port": 0
+        }
+      ],
+      "ui_parameters": [],
+      "source_columns": [],
+      "output_columns": [
+        {
+          "attributeName": "date",
+          "attributeType": "timestamp"
+        },
+        {
+          "attributeName": "open",
+          "attributeType": "double"
+        },
+        {
+          "attributeName": "high",
+          "attributeType": "double"
+        },
+        {
+          "attributeName": "low",
+          "attributeType": "double"
+        },
+        {
+          "attributeName": "close",
+          "attributeType": "double"
+        },
+        {
+          "attributeName": "volume",
+          "attributeType": "long"
+        },
+        {
+          "attributeName": "daily_return",
+          "attributeType": "double"
+        },
+        {
+          "attributeName": "ma_30",
+          "attributeType": "double"
+        }
+      ],
+      "retain_input_columns": true,
+      "native_notes": [
+        "Matched line/time-series plot on x='date', y='close'"
+      ]
+    }
+  ]
+}

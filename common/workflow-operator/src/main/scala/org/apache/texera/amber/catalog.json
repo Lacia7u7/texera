@@ -1,0 +1,2889 @@
+{
+  "operators": [
+    {
+      "operatorID": "ArrowSource-operator-2953ddfa-3b7c-4b40-be61-e86af2d5e4fa",
+      "operatorType": "ArrowSource",
+      "operatorVersion": "N/A",
+      "operatorProperties": {
+        "fileName": ""
+      },
+      "inputPorts": [],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "Arrow File Scan",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    },
+    {
+      "operatorID": "CSVFileScan-operator-7a2892e1-8812-41d9-80aa-273aa68cb8cc",
+      "operatorType": "CSVFileScan",
+      "operatorVersion": "N/A",
+      "operatorProperties": {
+        "fileEncoding": "UTF_8",
+        "customDelimiter": ",",
+        "hasHeader": true,
+        "fileName": ""
+      },
+      "inputPorts": [],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "CSV File Scan",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    },
+    {
+      "operatorID": "FileScan-operator-a71dc68f-95db-433a-b927-4aa1748d6ee6",
+      "operatorType": "FileScan",
+      "operatorVersion": "N/A",
+      "operatorProperties": {
+        "encoding": "UTF_8",
+        "extract": false,
+        "outputFileName": false,
+        "attributeType": "string",
+        "attributeName": "line",
+        "fileName": ""
+      },
+      "inputPorts": [],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": " File Scan",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    },
+    {
+      "operatorID": "JSONLFileScan-operator-fa519958-7a70-4761-a579-aa2192e026d9",
+      "operatorType": "JSONLFileScan",
+      "operatorVersion": "N/A",
+      "operatorProperties": {
+        "fileEncoding": "UTF_8",
+        "fileName": ""
+      },
+      "inputPorts": [],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "JSONL File Scan",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    },
+    {
+      "operatorID": "TextInput-operator-c922ef7e-d321-495c-9517-25ebe6669d86",
+      "operatorType": "TextInput",
+      "operatorVersion": "N/A",
+      "operatorProperties": {
+        "attributeType": "string",
+        "attributeName": "line",
+        "textInput": ""
+      },
+      "inputPorts": [],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "Text Input",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    },
+    {
+      "operatorID": "DictionaryMatcher-operator-433f9c67-db8c-4682-8181-d7ee21dc446f",
+      "operatorType": "DictionaryMatcher",
+      "operatorVersion": "N/A",
+      "operatorProperties": {
+        "result attribute": "matched",
+        "Dictionary": "",
+        "Attribute": "",
+        "Matching type": ""
+      },
+      "inputPorts": [
+        {
+          "portID": "input-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false,
+          "dependencies": []
+        }
+      ],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "Dictionary matcher",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    },
+    {
+      "operatorID": "KeywordSearch-operator-f4d943e2-f145-483c-9b73-301201fbebc4",
+      "operatorType": "KeywordSearch",
+      "operatorVersion": "N/A",
+      "operatorProperties": {
+        "attribute": "",
+        "keyword": ""
+      },
+      "inputPorts": [
+        {
+          "portID": "input-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false,
+          "dependencies": []
+        }
+      ],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "Keyword Search",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    },
+    {
+      "operatorID": "Regex-operator-a822d4bb-174d-4cda-a282-5915d5bc5f22",
+      "operatorType": "Regex",
+      "operatorVersion": "N/A",
+      "operatorProperties": {
+        "caseInsensitive": false,
+        "attribute": "",
+        "regex": ""
+      },
+      "inputPorts": [
+        {
+          "portID": "input-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false,
+          "dependencies": []
+        }
+      ],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "Regular Expression",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    },
+    {
+      "operatorID": "SubstringSearch-operator-22333ad4-cf2c-4bdf-a204-a6ab2ab8e826",
+      "operatorType": "SubstringSearch",
+      "operatorVersion": "N/A",
+      "operatorProperties": {
+        "isCaseSensitive": false,
+        "attribute": "",
+        "substring": ""
+      },
+      "inputPorts": [
+        {
+          "portID": "input-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false,
+          "dependencies": []
+        }
+      ],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "Substring Search",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    },
+    {
+      "operatorID": "CartesianProduct-operator-98d5fc05-8542-43fc-97f3-4ffeee552a8b",
+      "operatorType": "CartesianProduct",
+      "operatorVersion": "N/A",
+      "operatorProperties": {},
+      "inputPorts": [
+        {
+          "portID": "input-0",
+          "displayName": "left",
+          "allowMultiInputs": false,
+          "isDynamicPort": false,
+          "dependencies": []
+        },
+        {
+          "portID": "input-1",
+          "displayName": "right",
+          "allowMultiInputs": false,
+          "isDynamicPort": false,
+          "dependencies": [
+            {
+              "id": 0,
+              "internal": false
+            }
+          ]
+        }
+      ],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "Cartesian Product",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    },
+    {
+      "operatorID": "HashJoin-operator-6be1c0e0-4ffc-4b3a-9921-652089668587",
+      "operatorType": "HashJoin",
+      "operatorVersion": "N/A",
+      "operatorProperties": {
+        "joinType": "inner",
+        "buildAttributeName": "",
+        "probeAttributeName": ""
+      },
+      "inputPorts": [
+        {
+          "portID": "input-0",
+          "displayName": "left",
+          "allowMultiInputs": false,
+          "isDynamicPort": false,
+          "dependencies": []
+        },
+        {
+          "portID": "input-1",
+          "displayName": "right",
+          "allowMultiInputs": false,
+          "isDynamicPort": false,
+          "dependencies": [
+            {
+              "id": 0,
+              "internal": false
+            }
+          ]
+        }
+      ],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "Hash Join",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    },
+    {
+      "operatorID": "IntervalJoin-operator-94ce5ee3-888d-4194-8750-6af5eafb3bcd",
+      "operatorType": "IntervalJoin",
+      "operatorVersion": "N/A",
+      "operatorProperties": {
+        "constant": 10,
+        "includeLeftBound": true,
+        "includeRightBound": true,
+        "timeIntervalType": "day",
+        "leftAttributeName": "",
+        "rightAttributeName": ""
+      },
+      "inputPorts": [
+        {
+          "portID": "input-0",
+          "displayName": "left table",
+          "allowMultiInputs": false,
+          "isDynamicPort": false,
+          "dependencies": []
+        },
+        {
+          "portID": "input-1",
+          "displayName": "right table",
+          "allowMultiInputs": false,
+          "isDynamicPort": false,
+          "dependencies": [
+            {
+              "id": 0,
+              "internal": false
+            }
+          ]
+        }
+      ],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "Interval Join",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    },
+    {
+      "operatorID": "Aggregate-operator-fbcc0b1a-d5bc-42c7-89d9-5f99a98d0569",
+      "operatorType": "Aggregate",
+      "operatorVersion": "N/A",
+      "operatorProperties": {
+        "aggregations": [
+          {
+            "aggFunction": "",
+            "attribute": "",
+            "result attribute": ""
+          }
+        ]
+      },
+      "inputPorts": [
+        {
+          "portID": "input-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false,
+          "dependencies": []
+        }
+      ],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "Aggregate",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    },
+    {
+      "operatorID": "Distinct-operator-e55deaf5-0898-4af9-8195-965899c8ea9b",
+      "operatorType": "Distinct",
+      "operatorVersion": "N/A",
+      "operatorProperties": {},
+      "inputPorts": [
+        {
+          "portID": "input-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false,
+          "dependencies": []
+        }
+      ],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "Distinct",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    },
+    {
+      "operatorID": "Sort-operator-0ed0e580-1853-46a1-aca8-95c338099e8b",
+      "operatorType": "Sort",
+      "operatorVersion": "N/A",
+      "operatorProperties": {
+        "attributes": []
+      },
+      "inputPorts": [
+        {
+          "portID": "input-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false,
+          "dependencies": []
+        }
+      ],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "Sort",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    },
+    {
+      "operatorID": "Sort-operator-6ed8c337-70be-4e3a-b931-73aa0ecf0d42",
+      "operatorType": "Sort",
+      "operatorVersion": "N/A",
+      "operatorProperties": {},
+      "inputPorts": [
+        {
+          "portID": "input-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false,
+          "dependencies": []
+        }
+      ],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "Sort",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    },
+    {
+      "operatorID": "Filter-operator-be233302-0e5f-4535-859b-21a05d90eef4",
+      "operatorType": "Filter",
+      "operatorVersion": "N/A",
+      "operatorProperties": {},
+      "inputPorts": [
+        {
+          "portID": "input-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false,
+          "dependencies": []
+        }
+      ],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "Filter",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    },
+    {
+      "operatorID": "Limit-operator-fd28a8eb-3c59-4924-8165-122642d10bd3",
+      "operatorType": "Limit",
+      "operatorVersion": "N/A",
+      "operatorProperties": {},
+      "inputPorts": [
+        {
+          "portID": "input-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false,
+          "dependencies": []
+        }
+      ],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "Limit",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    },
+    {
+      "operatorID": "Projection-operator-b3114c5f-1696-420f-bada-fe708c11c3bf",
+      "operatorType": "Projection",
+      "operatorVersion": "N/A",
+      "operatorProperties": {
+        "isDrop": false
+      },
+      "inputPorts": [
+        {
+          "portID": "input-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false,
+          "dependencies": []
+        }
+      ],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "Projection",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    },
+    {
+      "operatorID": "TypeCasting-operator-b8785d82-8dce-44ee-b47a-4a35ef84fe56",
+      "operatorType": "TypeCasting",
+      "operatorVersion": "N/A",
+      "operatorProperties": {
+        "typeCastingUnits": []
+      },
+      "inputPorts": [
+        {
+          "portID": "input-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false,
+          "dependencies": []
+        }
+      ],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "Type Casting",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    },
+    {
+      "operatorID": "RandomKSampling-operator-914b05e3-7ab7-48d1-8ddc-1559302c5d6b",
+      "operatorType": "RandomKSampling",
+      "operatorVersion": "N/A",
+      "operatorProperties": {},
+      "inputPorts": [
+        {
+          "portID": "input-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false,
+          "dependencies": []
+        }
+      ],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "Random K Sampling",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    },
+    {
+      "operatorID": "ReservoirSampling-operator-59bc7446-274b-4934-be28-bd11b59dd70b",
+      "operatorType": "ReservoirSampling",
+      "operatorVersion": "N/A",
+      "operatorProperties": {},
+      "inputPorts": [
+        {
+          "portID": "input-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false,
+          "dependencies": []
+        }
+      ],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "Reservoir Sampling",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    },
+    {
+      "operatorID": "Split-operator-1aae1a37-276f-4863-a29f-d8bce28fb5bb",
+      "operatorType": "Split",
+      "operatorVersion": "N/A",
+      "operatorProperties": {
+        "k": 80,
+        "random": true,
+        "seed": 1
+      },
+      "inputPorts": [],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        },
+        {
+          "portID": "output-1",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "Split",
+      "dynamicInputPorts": true,
+      "dynamicOutputPorts": true
+    },
+    {
+      "operatorID": "UnnestString-operator-10eca6e3-5952-4751-9845-e9dfaedaf5a2",
+      "operatorType": "UnnestString",
+      "operatorVersion": "N/A",
+      "operatorProperties": {
+        "Delimiter": ",",
+        "Result attribute": "unnestResult",
+        "Attribute": ""
+      },
+      "inputPorts": [
+        {
+          "portID": "input-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false,
+          "dependencies": []
+        }
+      ],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "Unnest String",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    },
+    {
+      "operatorID": "BarChart-operator-ef49769f-57fa-43d2-a49c-7bec25797d6c",
+      "operatorType": "BarChart",
+      "operatorVersion": "N/A",
+      "operatorProperties": {
+        "categoryColumn": "No Selection",
+        "horizontalOrientation": false,
+        "fields": "",
+        "value": ""
+      },
+      "inputPorts": [
+        {
+          "portID": "input-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false,
+          "dependencies": []
+        }
+      ],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "Bar Chart",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    },
+    {
+      "operatorID": "BubbleChart-operator-f702a4a4-689a-4bd3-9152-7ebe5178a0b9",
+      "operatorType": "BubbleChart",
+      "operatorVersion": "N/A",
+      "operatorProperties": {
+        "enableColor": false,
+        "xValue": "",
+        "yValue": "",
+        "zValue": "",
+        "colorCategory": ""
+      },
+      "inputPorts": [
+        {
+          "portID": "input-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false,
+          "dependencies": []
+        }
+      ],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "Bubble Chart",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    },
+    {
+      "operatorID": "DotPlot-operator-b74e2826-dca4-4579-9705-e350215dd226",
+      "operatorType": "DotPlot",
+      "operatorVersion": "N/A",
+      "operatorProperties": {
+        "Count Attribute": ""
+      },
+      "inputPorts": [
+        {
+          "portID": "input-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false,
+          "dependencies": []
+        }
+      ],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "Dot Plot",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    },
+    {
+      "operatorID": "DumbbellPlot-operator-7818ab0d-dad7-4179-8d6c-2ebb01ee5686",
+      "operatorType": "DumbbellPlot",
+      "operatorVersion": "N/A",
+      "operatorProperties": {
+        "categoryColumnName": "",
+        "dumbbellStartValue": "",
+        "dumbbellEndValue": "",
+        "measurementColumnName": "",
+        "comparedColumnName": ""
+      },
+      "inputPorts": [
+        {
+          "portID": "input-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false,
+          "dependencies": []
+        }
+      ],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "Dumbbell Plot",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    },
+    {
+      "operatorID": "FigureFactoryTable-operator-1d300a9e-0815-441b-a778-892710a6eebb",
+      "operatorType": "FigureFactoryTable",
+      "operatorVersion": "N/A",
+      "operatorProperties": {
+        "add attribute": []
+      },
+      "inputPorts": [
+        {
+          "portID": "input-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false,
+          "dependencies": []
+        }
+      ],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "Figure Factory Table",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    },
+    {
+      "operatorID": "GanttChart-operator-e0aea151-a552-46f9-8fc0-221c80a4e19c",
+      "operatorType": "GanttChart",
+      "operatorVersion": "N/A",
+      "operatorProperties": {
+        "start": "",
+        "finish": "",
+        "task": ""
+      },
+      "inputPorts": [
+        {
+          "portID": "input-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false,
+          "dependencies": []
+        }
+      ],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "Gantt Chart",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    },
+    {
+      "operatorID": "IcicleChart-operator-3ae3e25c-7664-45b7-aeb3-67b6b425e4a3",
+      "operatorType": "IcicleChart",
+      "operatorVersion": "N/A",
+      "operatorProperties": {
+        "hierarchy": [
+          {
+            "attributeName": ""
+          }
+        ],
+        "value": ""
+      },
+      "inputPorts": [
+        {
+          "portID": "input-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false,
+          "dependencies": []
+        }
+      ],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "Icicle Chart",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    },
+    {
+      "operatorID": "IcicleChart-operator-c75d70ee-3ec0-4f32-9e13-f4c723d88efe",
+      "operatorType": "IcicleChart",
+      "operatorVersion": "N/A",
+      "operatorProperties": {
+        "hierarchy": [
+          {
+            "attributeName": ""
+          }
+        ],
+        "value": ""
+      },
+      "inputPorts": [
+        {
+          "portID": "input-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false,
+          "dependencies": []
+        }
+      ],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "Icicle Chart",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    },
+    {
+      "operatorID": "LineChart-operator-fcc4b934-324a-4cb5-8452-2d2acd0a7707",
+      "operatorType": "LineChart",
+      "operatorVersion": "N/A",
+      "operatorProperties": {
+        "yLabel": "Y Axis",
+        "xLabel": "X Axis",
+        "lines": []
+      },
+      "inputPorts": [
+        {
+          "portID": "input-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false,
+          "dependencies": []
+        }
+      ],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "Line Chart",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    },
+    {
+      "operatorID": "PieChart-operator-3b836b59-694c-48ae-bf38-f4d0f62dd897",
+      "operatorType": "PieChart",
+      "operatorVersion": "N/A",
+      "operatorProperties": {
+        "value": "",
+        "name": ""
+      },
+      "inputPorts": [
+        {
+          "portID": "input-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false,
+          "dependencies": []
+        }
+      ],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "Pie Chart",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    },
+    {
+      "operatorID": "RangeSlider-operator-0f974148-5915-4cf6-a739-5679cdaca92a",
+      "operatorType": "RangeSlider",
+      "operatorVersion": "N/A",
+      "operatorProperties": {
+        "Y-axis": "",
+        "X-axis": ""
+      },
+      "inputPorts": [
+        {
+          "portID": "input-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false,
+          "dependencies": []
+        }
+      ],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "Range Slider",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    },
+    {
+      "operatorID": "SankeyDiagram-operator-066172b7-1069-47c1-b890-278ebf39ca69",
+      "operatorType": "SankeyDiagram",
+      "operatorVersion": "N/A",
+      "operatorProperties": {
+        "Source Attribute": "",
+        "Target Attribute": "",
+        "Value Attribute": ""
+      },
+      "inputPorts": [
+        {
+          "portID": "input-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false,
+          "dependencies": []
+        }
+      ],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "Sankey Diagram",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    },
+    {
+      "operatorID": "Scatterplot-operator-1931db20-31dc-4c88-9da6-d3dcb398ebfc",
+      "operatorType": "Scatterplot",
+      "operatorVersion": "N/A",
+      "operatorProperties": {
+        "alpha": 1,
+        "xLogScale": false,
+        "yLogScale": false,
+        "xColumn": "",
+        "yColumn": ""
+      },
+      "inputPorts": [
+        {
+          "portID": "input-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false,
+          "dependencies": []
+        }
+      ],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "Scatter Plot",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    },
+    {
+      "operatorID": "TablesPlot-operator-e0a3b5dd-6393-4a29-9c4c-56ad8b8b4e93",
+      "operatorType": "TablesPlot",
+      "operatorVersion": "N/A",
+      "operatorProperties": {
+        "add attribute": [
+          {
+            "attributeName": ""
+          }
+        ]
+      },
+      "inputPorts": [
+        {
+          "portID": "input-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false,
+          "dependencies": []
+        }
+      ],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "Tables Plot",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    },
+    {
+      "operatorID": "TimeSeriesPlot-operator-2efaa07d-e691-46de-9b83-53c242841d04",
+      "operatorType": "TimeSeriesPlot",
+      "operatorVersion": "N/A",
+      "operatorProperties": {
+        "categoryColumn": "No Selection",
+        "facetColumn": "No Selection",
+        "line": "line",
+        "slider": false,
+        "timeColumn": "",
+        "valueColumn": ""
+      },
+      "inputPorts": [
+        {
+          "portID": "input-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false,
+          "dependencies": []
+        }
+      ],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "Time Series Plot",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    },
+    {
+      "operatorID": "BoxViolinPlot-operator-f50c0377-4b0a-4ae3-bce2-7fc9b353fbd3",
+      "operatorType": "BoxViolinPlot",
+      "operatorVersion": "N/A",
+      "operatorProperties": {
+        "Quartile Method": "linear",
+        "horizontalOrientation": false,
+        "violinPlot": false,
+        "value": ""
+      },
+      "inputPorts": [
+        {
+          "portID": "input-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false,
+          "dependencies": []
+        }
+      ],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "Box/Violin Plot",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    },
+    {
+      "operatorID": "ContinuousErrorBands-operator-07d42ae5-20f9-476e-96a0-72d24e44dbb6",
+      "operatorType": "ContinuousErrorBands",
+      "operatorVersion": "N/A",
+      "operatorProperties": {
+        "xLabel": "X Axis",
+        "yLabel": "Y Axis",
+        "bands": []
+      },
+      "inputPorts": [
+        {
+          "portID": "input-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false,
+          "dependencies": []
+        }
+      ],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "Continuous Error Bands",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    },
+    {
+      "operatorID": "Histogram-operator-77939ed1-9f38-4f3b-be58-31a38916faa1",
+      "operatorType": "Histogram",
+      "operatorVersion": "N/A",
+      "operatorProperties": {
+        "value": ""
+      },
+      "inputPorts": [
+        {
+          "portID": "input-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false,
+          "dependencies": []
+        }
+      ],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "Histogram",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    },
+    {
+      "operatorID": "Histogram2D-operator-60f6c41c-1e37-4ef8-b44b-c3388deb60d1",
+      "operatorType": "Histogram2D",
+      "operatorVersion": "N/A",
+      "operatorProperties": {
+        "xBins": 10,
+        "yBins": 10,
+        "normalize": "density",
+        "xColumn": "",
+        "yColumn": ""
+      },
+      "inputPorts": [
+        {
+          "portID": "input-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false,
+          "dependencies": []
+        }
+      ],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "Histogram2D",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    },
+    {
+      "operatorID": "ScatterMatrixChart-operator-38745d8a-3785-4e52-ba05-5f7da4603557",
+      "operatorType": "ScatterMatrixChart",
+      "operatorVersion": "N/A",
+      "operatorProperties": {
+        "Selected Attributes": [],
+        "Color": ""
+      },
+      "inputPorts": [
+        {
+          "portID": "input-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false,
+          "dependencies": []
+        }
+      ],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "Scatter Matrix Chart",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    },
+    {
+      "operatorID": "StripChart-operator-4f9e7bc0-1647-4d58-bacd-c65984dc6a69",
+      "operatorType": "StripChart",
+      "operatorVersion": "N/A",
+      "operatorProperties": {
+        "x": "",
+        "y": ""
+      },
+      "inputPorts": [
+        {
+          "portID": "input-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false,
+          "dependencies": []
+        }
+      ],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "Strip Chart",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    },
+    {
+      "operatorID": "TreePlot-operator-38877af1-9b6a-4fb6-8cee-edc5a54a5c9b",
+      "operatorType": "TreePlot",
+      "operatorVersion": "N/A",
+      "operatorProperties": {
+        "Edge List Column": ""
+      },
+      "inputPorts": [
+        {
+          "portID": "input-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false,
+          "dependencies": []
+        }
+      ],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "Tree Plot",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    },
+    {
+      "operatorID": "ContourPlot-operator-d430f695-c9a0-4c48-8cc2-776b5b5be8c0",
+      "operatorType": "ContourPlot",
+      "operatorVersion": "N/A",
+      "operatorProperties": {
+        "gridSize": "10",
+        "connectGaps": true,
+        "Coloring Method": "heatmap",
+        "x": "",
+        "y": "",
+        "z": ""
+      },
+      "inputPorts": [
+        {
+          "portID": "input-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false,
+          "dependencies": []
+        }
+      ],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "Contour Plot",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    },
+    {
+      "operatorID": "Dendrogram-operator-00a7c79c-8ac3-4ef4-b7ac-b99affe5ad2e",
+      "operatorType": "Dendrogram",
+      "operatorVersion": "N/A",
+      "operatorProperties": {
+        "xVal": "",
+        "yVal": "",
+        "Labels": ""
+      },
+      "inputPorts": [
+        {
+          "portID": "input-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false,
+          "dependencies": []
+        }
+      ],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "Dendrogram",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    },
+    {
+      "operatorID": "HeatMap-operator-55972f50-222c-4f85-9041-9a1a3a65605d",
+      "operatorType": "HeatMap",
+      "operatorVersion": "N/A",
+      "operatorProperties": {
+        "x": "",
+        "y": "",
+        "Values": ""
+      },
+      "inputPorts": [
+        {
+          "portID": "input-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false,
+          "dependencies": []
+        }
+      ],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "Heatmap",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    },
+    {
+      "operatorID": "NetworkGraph-operator-f3c26f3a-8e31-4ac2-a477-7e747e31491e",
+      "operatorType": "NetworkGraph",
+      "operatorVersion": "N/A",
+      "operatorProperties": {
+        "title": "Network Graph",
+        "source": "",
+        "destination": ""
+      },
+      "inputPorts": [
+        {
+          "portID": "input-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false,
+          "dependencies": []
+        }
+      ],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "Network Graph",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    },
+    {
+      "operatorID": "QuiverPlot-operator-1ed3209b-4831-492e-aab1-c44b9ae78430",
+      "operatorType": "QuiverPlot",
+      "operatorVersion": "N/A",
+      "operatorProperties": {
+        "x": "",
+        "y": "",
+        "u": "",
+        "v": ""
+      },
+      "inputPorts": [
+        {
+          "portID": "input-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false,
+          "dependencies": []
+        }
+      ],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "Quiver Plot",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    },
+    {
+      "operatorID": "QuiverPlot-operator-dcebfefd-9f3a-4702-93ae-8a374c2a5c60",
+      "operatorType": "QuiverPlot",
+      "operatorVersion": "N/A",
+      "operatorProperties": {
+        "x": "",
+        "y": "",
+        "u": "",
+        "v": ""
+      },
+      "inputPorts": [
+        {
+          "portID": "input-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false,
+          "dependencies": []
+        }
+      ],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "Quiver Plot",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    },
+    {
+      "operatorID": "TernaryPlot-operator-2000371f-c80f-41c2-a51c-a00a0ed3ac10",
+      "operatorType": "TernaryPlot",
+      "operatorVersion": "N/A",
+      "operatorProperties": {
+        "colorEnabled": false,
+        "firstVariable": "",
+        "secondVariable": "",
+        "thirdVariable": ""
+      },
+      "inputPorts": [
+        {
+          "portID": "input-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false,
+          "dependencies": []
+        }
+      ],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "Ternary Plot",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    },
+    {
+      "operatorID": "VolcanoPlot-operator-2ca7d2cd-69f3-4d26-935d-07cb048096d6",
+      "operatorType": "VolcanoPlot",
+      "operatorVersion": "N/A",
+      "operatorProperties": {
+        "effectColumn": "",
+        "pvalueColumn": ""
+      },
+      "inputPorts": [
+        {
+          "portID": "input-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false,
+          "dependencies": []
+        }
+      ],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "Volcano Plot",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    },
+    {
+      "operatorID": "TernaryPlot-operator-dd361c61-76a7-44f3-aa56-2ff10ce5ceaf",
+      "operatorType": "TernaryPlot",
+      "operatorVersion": "N/A",
+      "operatorProperties": {
+        "colorEnabled": false,
+        "firstVariable": "",
+        "secondVariable": "",
+        "thirdVariable": ""
+      },
+      "inputPorts": [
+        {
+          "portID": "input-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false,
+          "dependencies": []
+        }
+      ],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "Ternary Plot",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    },
+    {
+      "operatorID": "VolcanoPlot-operator-6a436ad1-b8c7-4804-af86-2ec7f6106f72",
+      "operatorType": "VolcanoPlot",
+      "operatorVersion": "N/A",
+      "operatorProperties": {
+        "effectColumn": "",
+        "pvalueColumn": ""
+      },
+      "inputPorts": [
+        {
+          "portID": "input-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false,
+          "dependencies": []
+        }
+      ],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "Volcano Plot",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    },
+    {
+      "operatorID": "BulletChart-operator-4ecc403d-14b3-4a22-ab8a-f19d6c57c520",
+      "operatorType": "BulletChart",
+      "operatorVersion": "N/A",
+      "operatorProperties": {
+        "value": "",
+        "deltaReference": ""
+      },
+      "inputPorts": [
+        {
+          "portID": "input-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false,
+          "dependencies": []
+        }
+      ],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "Bullet Chart",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    },
+    {
+      "operatorID": "CandlestickChart-operator-7f934e53-f4e0-4cb5-a0dc-db96f7d3de47",
+      "operatorType": "CandlestickChart",
+      "operatorVersion": "N/A",
+      "operatorProperties": {
+        "date": "",
+        "open": "",
+        "high": "",
+        "low": "",
+        "close": ""
+      },
+      "inputPorts": [
+        {
+          "portID": "input-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false,
+          "dependencies": []
+        }
+      ],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "Candlestick Chart",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    },
+    {
+      "operatorID": "FunnelPlot-operator-1ace8f58-05f7-4fae-8b7a-48fa05ca869f",
+      "operatorType": "FunnelPlot",
+      "operatorVersion": "N/A",
+      "operatorProperties": {
+        "x": "",
+        "y": ""
+      },
+      "inputPorts": [
+        {
+          "portID": "input-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false,
+          "dependencies": []
+        }
+      ],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "Funnel Plot",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    },
+    {
+      "operatorID": "GaugeChart-operator-bdfb4bfd-51db-4300-a76b-919b66acbd34",
+      "operatorType": "GaugeChart",
+      "operatorVersion": "N/A",
+      "operatorProperties": {
+        "value": ""
+      },
+      "inputPorts": [
+        {
+          "portID": "input-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false,
+          "dependencies": []
+        }
+      ],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "Gauge Chart",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    },
+    {
+      "operatorID": "WaterfallChart-operator-e51ec00c-1815-4c16-b50e-2292e5780461",
+      "operatorType": "WaterfallChart",
+      "operatorVersion": "N/A",
+      "operatorProperties": {
+        "xColumn": "",
+        "yColumn": ""
+      },
+      "inputPorts": [
+        {
+          "portID": "input-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false,
+          "dependencies": []
+        }
+      ],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "Waterfall Chart",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    },
+    {
+      "operatorID": "HTMLVisualizer-operator-c815a669-81af-4adb-865b-d9f2404cc249",
+      "operatorType": "HTMLVisualizer",
+      "operatorVersion": "N/A",
+      "operatorProperties": {
+        "htmlContentAttrName": ""
+      },
+      "inputPorts": [
+        {
+          "portID": "input-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false,
+          "dependencies": []
+        }
+      ],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "HTML Visualizer",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    },
+    {
+      "operatorID": "ImageVisualizer-operator-569d29a2-d6d7-408d-8b3e-1920ae25fac3",
+      "operatorType": "ImageVisualizer",
+      "operatorVersion": "N/A",
+      "operatorProperties": {
+        "binaryContent": ""
+      },
+      "inputPorts": [
+        {
+          "portID": "input-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false,
+          "dependencies": []
+        }
+      ],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "Image Visualizer",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    },
+    {
+      "operatorID": "URLVisualizer-operator-187113ba-5c92-4e55-beff-8c23923cae3d",
+      "operatorType": "URLVisualizer",
+      "operatorVersion": "N/A",
+      "operatorProperties": {
+        "urlContentAttrName": ""
+      },
+      "inputPorts": [
+        {
+          "portID": "input-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false,
+          "dependencies": []
+        }
+      ],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "URL Visualizer",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    },
+    {
+      "operatorID": "WordCloud-operator-83815e13-64dc-4cb1-be4c-295d1f93fee6",
+      "operatorType": "WordCloud",
+      "operatorVersion": "N/A",
+      "operatorProperties": {
+        "topN": 100,
+        "textColumn": ""
+      },
+      "inputPorts": [
+        {
+          "portID": "input-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false,
+          "dependencies": []
+        }
+      ],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "Word Cloud",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    },
+    {
+      "operatorID": "ChoroplethMap-operator-e0b89bb9-e0f9-45eb-91e9-681d8ea4d5f0",
+      "operatorType": "ChoroplethMap",
+      "operatorVersion": "N/A",
+      "operatorProperties": {
+        "locations": "",
+        "color": ""
+      },
+      "inputPorts": [
+        {
+          "portID": "input-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false,
+          "dependencies": []
+        }
+      ],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "Choropleth Map",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    },
+    {
+      "operatorID": "Scatter3DChart-operator-929fb224-6e2f-4917-84ed-b04c361424c7",
+      "operatorType": "Scatter3DChart",
+      "operatorVersion": "N/A",
+      "operatorProperties": {
+        "x": "",
+        "y": "",
+        "z": ""
+      },
+      "inputPorts": [
+        {
+          "portID": "input-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false,
+          "dependencies": []
+        }
+      ],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "Scatter3D Chart",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    },
+    {
+      "operatorID": "NestedTable-operator-b107f3d0-9a4c-4118-8a5b-836bb94dc2a2",
+      "operatorType": "NestedTable",
+      "operatorVersion": "N/A",
+      "operatorProperties": {
+        "add attribute": []
+      },
+      "inputPorts": [
+        {
+          "portID": "input-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false,
+          "dependencies": []
+        }
+      ],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "Nested Table",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    },
+    {
+      "operatorID": "If-operator-8febb7e9-56b7-41c3-ae3e-b3dab428a7cd",
+      "operatorType": "If",
+      "operatorVersion": "N/A",
+      "operatorProperties": {
+        "conditionName": ""
+      },
+      "inputPorts": [
+        {
+          "portID": "input-0",
+          "displayName": "Condition",
+          "allowMultiInputs": false,
+          "isDynamicPort": false,
+          "dependencies": []
+        },
+        {
+          "portID": "input-1",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false,
+          "dependencies": [
+            {
+              "id": 0,
+              "internal": false
+            }
+          ]
+        }
+      ],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "False",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        },
+        {
+          "portID": "output-1",
+          "displayName": "True",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "If",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    }
+  ],
+  "operatorPositions": {
+    "ArrowSource-operator-2953ddfa-3b7c-4b40-be61-e86af2d5e4fa": {
+      "x": 535.63330078125,
+      "y": 281.95001220703125
+    },
+    "CSVFileScan-operator-7a2892e1-8812-41d9-80aa-273aa68cb8cc": {
+      "x": 427.6333312988281,
+      "y": 153.9499969482422
+    },
+    "FileScan-operator-a71dc68f-95db-433a-b927-4aa1748d6ee6": {
+      "x": 600.63330078125,
+      "y": 197.9499969482422
+    },
+    "JSONLFileScan-operator-fa519958-7a70-4761-a579-aa2192e026d9": {
+      "x": 710.6333618164062,
+      "y": 334.95001220703125
+    },
+    "TextInput-operator-c922ef7e-d321-495c-9517-25ebe6669d86": {
+      "x": 717.6333618164062,
+      "y": 187.9499969482422
+    },
+    "DictionaryMatcher-operator-433f9c67-db8c-4682-8181-d7ee21dc446f": {
+      "x": 417.6333312988281,
+      "y": 340.95001220703125
+    },
+    "KeywordSearch-operator-f4d943e2-f145-483c-9b73-301201fbebc4": {
+      "x": 406.6333312988281,
+      "y": 513.9500122070312
+    },
+    "Regex-operator-a822d4bb-174d-4cda-a282-5915d5bc5f22": {
+      "x": 597.63330078125,
+      "y": 489.95001220703125
+    },
+    "SubstringSearch-operator-22333ad4-cf2c-4bdf-a204-a6ab2ab8e826": {
+      "x": 736.6333618164062,
+      "y": 582.9500122070312
+    },
+    "CartesianProduct-operator-98d5fc05-8542-43fc-97f3-4ffeee552a8b": {
+      "x": -156.36668395996094,
+      "y": 582.9500122070312
+    },
+    "HashJoin-operator-6be1c0e0-4ffc-4b3a-9921-652089668587": {
+      "x": 85.63331604003906,
+      "y": 231.9499969482422
+    },
+    "IntervalJoin-operator-94ce5ee3-888d-4194-8750-6af5eafb3bcd": {
+      "x": 159.63331604003906,
+      "y": 414.95001220703125
+    },
+    "Aggregate-operator-fbcc0b1a-d5bc-42c7-89d9-5f99a98d0569": {
+      "x": -172.36668395996094,
+      "y": -22.049999237060547
+    },
+    "Distinct-operator-e55deaf5-0898-4af9-8195-965899c8ea9b": {
+      "x": -408.3666687011719,
+      "y": 311.95001220703125
+    },
+    "Sort-operator-0ed0e580-1853-46a1-aca8-95c338099e8b": {
+      "x": 47.63335037231445,
+      "y": -31.049999237060547
+    },
+    "Sort-operator-6ed8c337-70be-4e3a-b931-73aa0ecf0d42": {
+      "x": -400.3666687011719,
+      "y": 743.9500122070312
+    },
+    "Filter-operator-be233302-0e5f-4535-859b-21a05d90eef4": {
+      "x": -556.36669921875,
+      "y": 1110.949951171875
+    },
+    "Limit-operator-fd28a8eb-3c59-4924-8165-122642d10bd3": {
+      "x": -665.36669921875,
+      "y": 992.9500122070312
+    },
+    "Projection-operator-b3114c5f-1696-420f-bada-fe708c11c3bf": {
+      "x": -295.3666687011719,
+      "y": 1476.949951171875
+    },
+    "TypeCasting-operator-b8785d82-8dce-44ee-b47a-4a35ef84fe56": {
+      "x": -219.3666534423828,
+      "y": 1219.949951171875
+    },
+    "RandomKSampling-operator-914b05e3-7ab7-48d1-8ddc-1559302c5d6b": {
+      "x": -549,
+      "y": 1750
+    },
+    "ReservoirSampling-operator-59bc7446-274b-4934-be28-bd11b59dd70b": {
+      "x": -332.3666687011719,
+      "y": 1897.949951171875
+    },
+    "Split-operator-1aae1a37-276f-4863-a29f-d8bce28fb5bb": {
+      "x": -611.36669921875,
+      "y": 1597.949951171875
+    },
+    "UnnestString-operator-10eca6e3-5952-4751-9845-e9dfaedaf5a2": {
+      "x": -748,
+      "y": 1671
+    },
+    "BarChart-operator-ef49769f-57fa-43d2-a49c-7bec25797d6c": {
+      "x": -797.36669921875,
+      "y": 2364.216552734375
+    },
+    "BubbleChart-operator-f702a4a4-689a-4bd3-9152-7ebe5178a0b9": {
+      "x": -525.36669921875,
+      "y": 2326.216552734375
+    },
+    "DotPlot-operator-b74e2826-dca4-4579-9705-e350215dd226": {
+      "x": -561.36669921875,
+      "y": 2121.216552734375
+    },
+    "DumbbellPlot-operator-7818ab0d-dad7-4179-8d6c-2ebb01ee5686": {
+      "x": -499.3666687011719,
+      "y": 1997.2166748046875
+    },
+    "FigureFactoryTable-operator-1d300a9e-0815-441b-a778-892710a6eebb": {
+      "x": -810.36669921875,
+      "y": 2213.216552734375
+    },
+    "GanttChart-operator-e0aea151-a552-46f9-8fc0-221c80a4e19c": {
+      "x": -307.36663818359375,
+      "y": 2243.216552734375
+    },
+    "IcicleChart-operator-3ae3e25c-7664-45b7-aeb3-67b6b425e4a3": {
+      "x": -355.36663818359375,
+      "y": 2090.216552734375
+    },
+    "IcicleChart-operator-c75d70ee-3ec0-4f32-9e13-f4c723d88efe": {
+      "x": -551.36669921875,
+      "y": 1913.2166748046875
+    },
+    "LineChart-operator-fcc4b934-324a-4cb5-8452-2d2acd0a7707": {
+      "x": -578.36669921875,
+      "y": 2241.216552734375
+    },
+    "PieChart-operator-3b836b59-694c-48ae-bf38-f4d0f62dd897": {
+      "x": -641.36669921875,
+      "y": 1920.2166748046875
+    },
+    "RangeSlider-operator-0f974148-5915-4cf6-a739-5679cdaca92a": {
+      "x": -370.36663818359375,
+      "y": 1814.2166748046875
+    },
+    "SankeyDiagram-operator-066172b7-1069-47c1-b890-278ebf39ca69": {
+      "x": -415.3666687011719,
+      "y": 2164.216552734375
+    },
+    "Scatterplot-operator-1931db20-31dc-4c88-9da6-d3dcb398ebfc": {
+      "x": -681.36669921875,
+      "y": 2255.216552734375
+    },
+    "TablesPlot-operator-e0a3b5dd-6393-4a29-9c4c-56ad8b8b4e93": {
+      "x": -643.36669921875,
+      "y": 2094.216552734375
+    },
+    "TimeSeriesPlot-operator-2efaa07d-e691-46de-9b83-53c242841d04": {
+      "x": -213.3666534423828,
+      "y": 2077.216552734375
+    },
+    "BoxViolinPlot-operator-f50c0377-4b0a-4ae3-bce2-7fc9b353fbd3": {
+      "x": -189.3666534423828,
+      "y": 1905.2166748046875
+    },
+    "ContinuousErrorBands-operator-07d42ae5-20f9-476e-96a0-72d24e44dbb6": {
+      "x": -310.36663818359375,
+      "y": 2417.216552734375
+    },
+    "Histogram-operator-77939ed1-9f38-4f3b-be58-31a38916faa1": {
+      "x": -472.3666687011719,
+      "y": 2564.216552734375
+    },
+    "Histogram2D-operator-60f6c41c-1e37-4ef8-b44b-c3388deb60d1": {
+      "x": -566.36669921875,
+      "y": 2477.216552734375
+    },
+    "ScatterMatrixChart-operator-38745d8a-3785-4e52-ba05-5f7da4603557": {
+      "x": -609.36669921875,
+      "y": 2670.216552734375
+    },
+    "StripChart-operator-4f9e7bc0-1647-4d58-bacd-c65984dc6a69": {
+      "x": -714.36669921875,
+      "y": 2679.216552734375
+    },
+    "TreePlot-operator-38877af1-9b6a-4fb6-8cee-edc5a54a5c9b": {
+      "x": -673.36669921875,
+      "y": 2473.216552734375
+    },
+    "ContourPlot-operator-d430f695-c9a0-4c48-8cc2-776b5b5be8c0": {
+      "x": -511.3666687011719,
+      "y": 2808.216552734375
+    },
+    "Dendrogram-operator-00a7c79c-8ac3-4ef4-b7ac-b99affe5ad2e": {
+      "x": -331.36663818359375,
+      "y": 2703.216552734375
+    },
+    "HeatMap-operator-55972f50-222c-4f85-9041-9a1a3a65605d": {
+      "x": -424.3666687011719,
+      "y": 2996.216552734375
+    },
+    "NetworkGraph-operator-f3c26f3a-8e31-4ac2-a477-7e747e31491e": {
+      "x": -621.36669921875,
+      "y": 2992.216552734375
+    },
+    "QuiverPlot-operator-1ed3209b-4831-492e-aab1-c44b9ae78430": {
+      "x": -726.36669921875,
+      "y": 3100.216552734375
+    },
+    "QuiverPlot-operator-dcebfefd-9f3a-4702-93ae-8a374c2a5c60": {
+      "x": -246.3666534423828,
+      "y": 2863.216552734375
+    },
+    "TernaryPlot-operator-2000371f-c80f-41c2-a51c-a00a0ed3ac10": {
+      "x": -357.36663818359375,
+      "y": 2836.216552734375
+    },
+    "VolcanoPlot-operator-2ca7d2cd-69f3-4d26-935d-07cb048096d6": {
+      "x": -799.36669921875,
+      "y": 2944.216552734375
+    },
+    "TernaryPlot-operator-dd361c61-76a7-44f3-aa56-2ff10ce5ceaf": {
+      "x": -269.36663818359375,
+      "y": 3126.216552734375
+    },
+    "VolcanoPlot-operator-6a436ad1-b8c7-4804-af86-2ec7f6106f72": {
+      "x": -552.36669921875,
+      "y": 3182.216552734375
+    },
+    "BulletChart-operator-4ecc403d-14b3-4a22-ab8a-f19d6c57c520": {
+      "x": -625.36669921875,
+      "y": 2811.216552734375
+    },
+    "CandlestickChart-operator-7f934e53-f4e0-4cb5-a0dc-db96f7d3de47": {
+      "x": -829.36669921875,
+      "y": 3213.216552734375
+    },
+    "FunnelPlot-operator-1ace8f58-05f7-4fae-8b7a-48fa05ca869f": {
+      "x": -649.36669921875,
+      "y": 3293.216552734375
+    },
+    "GaugeChart-operator-bdfb4bfd-51db-4300-a76b-919b66acbd34": {
+      "x": -421.3666687011719,
+      "y": 3289.216552734375
+    },
+    "WaterfallChart-operator-e51ec00c-1815-4c16-b50e-2292e5780461": {
+      "x": -492.3666687011719,
+      "y": 3108.216552734375
+    },
+    "HTMLVisualizer-operator-c815a669-81af-4adb-865b-d9f2404cc249": {
+      "x": -908.36669921875,
+      "y": 3104.216552734375
+    },
+    "ImageVisualizer-operator-569d29a2-d6d7-408d-8b3e-1920ae25fac3": {
+      "x": -831.36669921875,
+      "y": 3314.216552734375
+    },
+    "URLVisualizer-operator-187113ba-5c92-4e55-beff-8c23923cae3d": {
+      "x": -842.36669921875,
+      "y": 3451.216552734375
+    },
+    "WordCloud-operator-83815e13-64dc-4cb1-be4c-295d1f93fee6": {
+      "x": -650.36669921875,
+      "y": 3464.216552734375
+    },
+    "ChoroplethMap-operator-e0b89bb9-e0f9-45eb-91e9-681d8ea4d5f0": {
+      "x": -993.36669921875,
+      "y": 3339.216552734375
+    },
+    "Scatter3DChart-operator-929fb224-6e2f-4917-84ed-b04c361424c7": {
+      "x": -966.36669921875,
+      "y": 3578.216552734375
+    },
+    "NestedTable-operator-b107f3d0-9a4c-4118-8a5b-836bb94dc2a2": {
+      "x": -754.36669921875,
+      "y": 3614.216552734375
+    },
+    "If-operator-8febb7e9-56b7-41c3-ae3e-b3dab428a7cd": {
+      "x": -477.36663818359375,
+      "y": 3573.216552734375
+    }
+  },
+  "links": [
+    {
+      "linkID": "link-a75743d7-2d3a-42a8-996e-c2539e97cf2d",
+      "source": {
+        "operatorID": "BarChart-operator-ef49769f-57fa-43d2-a49c-7bec25797d6c",
+        "portID": "output-0"
+      },
+      "target": {
+        "operatorID": "BubbleChart-operator-f702a4a4-689a-4bd3-9152-7ebe5178a0b9",
+        "portID": "input-0"
+      }
+    },
+    {
+      "linkID": "link-82fefcae-c360-4c68-8b41-c9e34bfb8744",
+      "source": {
+        "operatorID": "DotPlot-operator-b74e2826-dca4-4579-9705-e350215dd226",
+        "portID": "output-0"
+      },
+      "target": {
+        "operatorID": "DumbbellPlot-operator-7818ab0d-dad7-4179-8d6c-2ebb01ee5686",
+        "portID": "input-0"
+      }
+    },
+    {
+      "linkID": "link-bd4157d2-ece8-4ab5-8c7f-50683a24cbaa",
+      "source": {
+        "operatorID": "DumbbellPlot-operator-7818ab0d-dad7-4179-8d6c-2ebb01ee5686",
+        "portID": "output-0"
+      },
+      "target": {
+        "operatorID": "ReservoirSampling-operator-59bc7446-274b-4934-be28-bd11b59dd70b",
+        "portID": "input-0"
+      }
+    },
+    {
+      "linkID": "link-f2024126-38db-4b83-8071-ad24c55b870a",
+      "source": {
+        "operatorID": "FigureFactoryTable-operator-1d300a9e-0815-441b-a778-892710a6eebb",
+        "portID": "output-0"
+      },
+      "target": {
+        "operatorID": "BarChart-operator-ef49769f-57fa-43d2-a49c-7bec25797d6c",
+        "portID": "input-0"
+      }
+    },
+    {
+      "linkID": "link-ec154547-5240-4f29-973b-8e8a9d1abfe3",
+      "source": {
+        "operatorID": "BubbleChart-operator-f702a4a4-689a-4bd3-9152-7ebe5178a0b9",
+        "portID": "output-0"
+      },
+      "target": {
+        "operatorID": "GanttChart-operator-e0aea151-a552-46f9-8fc0-221c80a4e19c",
+        "portID": "input-0"
+      }
+    },
+    {
+      "linkID": "link-c026a799-002b-408f-8b5a-6a2a59dc4af4",
+      "source": {
+        "operatorID": "IcicleChart-operator-c75d70ee-3ec0-4f32-9e13-f4c723d88efe",
+        "portID": "output-0"
+      },
+      "target": {
+        "operatorID": "RandomKSampling-operator-914b05e3-7ab7-48d1-8ddc-1559302c5d6b",
+        "portID": "input-0"
+      }
+    },
+    {
+      "linkID": "link-008c38f2-fefe-483e-9d61-b7dc1d79dcff",
+      "source": {
+        "operatorID": "LineChart-operator-fcc4b934-324a-4cb5-8452-2d2acd0a7707",
+        "portID": "output-0"
+      },
+      "target": {
+        "operatorID": "DotPlot-operator-b74e2826-dca4-4579-9705-e350215dd226",
+        "portID": "input-0"
+      }
+    },
+    {
+      "linkID": "link-4d15bc0b-6a22-452a-9843-ff32d8729a71",
+      "source": {
+        "operatorID": "UnnestString-operator-10eca6e3-5952-4751-9845-e9dfaedaf5a2",
+        "portID": "output-0"
+      },
+      "target": {
+        "operatorID": "PieChart-operator-3b836b59-694c-48ae-bf38-f4d0f62dd897",
+        "portID": "input-0"
+      }
+    },
+    {
+      "linkID": "link-f34c1a6f-9da0-446f-82c3-d2e43bec1c94",
+      "source": {
+        "operatorID": "PieChart-operator-3b836b59-694c-48ae-bf38-f4d0f62dd897",
+        "portID": "output-0"
+      },
+      "target": {
+        "operatorID": "IcicleChart-operator-c75d70ee-3ec0-4f32-9e13-f4c723d88efe",
+        "portID": "input-0"
+      }
+    },
+    {
+      "linkID": "link-d2ba1ba5-22b4-46cb-bc88-9f72daf355e6",
+      "source": {
+        "operatorID": "RandomKSampling-operator-914b05e3-7ab7-48d1-8ddc-1559302c5d6b",
+        "portID": "output-0"
+      },
+      "target": {
+        "operatorID": "RangeSlider-operator-0f974148-5915-4cf6-a739-5679cdaca92a",
+        "portID": "input-0"
+      }
+    },
+    {
+      "linkID": "link-8067850c-34ca-4427-8be6-5c223879eb56",
+      "source": {
+        "operatorID": "RangeSlider-operator-0f974148-5915-4cf6-a739-5679cdaca92a",
+        "portID": "output-0"
+      },
+      "target": {
+        "operatorID": "IcicleChart-operator-3ae3e25c-7664-45b7-aeb3-67b6b425e4a3",
+        "portID": "input-0"
+      }
+    },
+    {
+      "linkID": "link-01760650-5ed1-4aa9-aca7-1001c3c2c42f",
+      "source": {
+        "operatorID": "Scatterplot-operator-1931db20-31dc-4c88-9da6-d3dcb398ebfc",
+        "portID": "output-0"
+      },
+      "target": {
+        "operatorID": "LineChart-operator-fcc4b934-324a-4cb5-8452-2d2acd0a7707",
+        "portID": "input-0"
+      }
+    },
+    {
+      "linkID": "link-7cfbd2b0-3a57-4455-b567-371fd82ec571",
+      "source": {
+        "operatorID": "TablesPlot-operator-e0a3b5dd-6393-4a29-9c4c-56ad8b8b4e93",
+        "portID": "output-0"
+      },
+      "target": {
+        "operatorID": "SankeyDiagram-operator-066172b7-1069-47c1-b890-278ebf39ca69",
+        "portID": "input-0"
+      }
+    },
+    {
+      "linkID": "link-496de7cb-09a2-4a1f-8f2d-b64cf4ea42ce",
+      "source": {
+        "operatorID": "IcicleChart-operator-3ae3e25c-7664-45b7-aeb3-67b6b425e4a3",
+        "portID": "output-0"
+      },
+      "target": {
+        "operatorID": "TimeSeriesPlot-operator-2efaa07d-e691-46de-9b83-53c242841d04",
+        "portID": "input-0"
+      }
+    },
+    {
+      "linkID": "link-e474988c-cad5-4568-bc32-f760d95cc402",
+      "source": {
+        "operatorID": "ReservoirSampling-operator-59bc7446-274b-4934-be28-bd11b59dd70b",
+        "portID": "output-0"
+      },
+      "target": {
+        "operatorID": "BoxViolinPlot-operator-f50c0377-4b0a-4ae3-bce2-7fc9b353fbd3",
+        "portID": "input-0"
+      }
+    },
+    {
+      "linkID": "link-921fccba-4627-4a0a-aa24-7e4944e840a4",
+      "source": {
+        "operatorID": "SankeyDiagram-operator-066172b7-1069-47c1-b890-278ebf39ca69",
+        "portID": "output-0"
+      },
+      "target": {
+        "operatorID": "ContinuousErrorBands-operator-07d42ae5-20f9-476e-96a0-72d24e44dbb6",
+        "portID": "input-0"
+      }
+    },
+    {
+      "linkID": "link-d950ddd6-6e3b-4986-9161-9d8029333d52",
+      "source": {
+        "operatorID": "Histogram2D-operator-60f6c41c-1e37-4ef8-b44b-c3388deb60d1",
+        "portID": "output-0"
+      },
+      "target": {
+        "operatorID": "Histogram-operator-77939ed1-9f38-4f3b-be58-31a38916faa1",
+        "portID": "input-0"
+      }
+    },
+    {
+      "linkID": "link-e99d88b7-e267-434e-9d29-a40f4e4b88f4",
+      "source": {
+        "operatorID": "ScatterMatrixChart-operator-38745d8a-3785-4e52-ba05-5f7da4603557",
+        "portID": "output-0"
+      },
+      "target": {
+        "operatorID": "Histogram2D-operator-60f6c41c-1e37-4ef8-b44b-c3388deb60d1",
+        "portID": "input-0"
+      }
+    },
+    {
+      "linkID": "link-7773f83c-69e9-4f46-aa32-f85e35e9117c",
+      "source": {
+        "operatorID": "StripChart-operator-4f9e7bc0-1647-4d58-bacd-c65984dc6a69",
+        "portID": "output-0"
+      },
+      "target": {
+        "operatorID": "ScatterMatrixChart-operator-38745d8a-3785-4e52-ba05-5f7da4603557",
+        "portID": "input-0"
+      }
+    },
+    {
+      "linkID": "link-003de26b-c684-4bf1-b635-e10fe5bd1341",
+      "source": {
+        "operatorID": "Histogram-operator-77939ed1-9f38-4f3b-be58-31a38916faa1",
+        "portID": "output-0"
+      },
+      "target": {
+        "operatorID": "Dendrogram-operator-00a7c79c-8ac3-4ef4-b7ac-b99affe5ad2e",
+        "portID": "input-0"
+      }
+    },
+    {
+      "linkID": "link-d9b3571b-db9f-4af4-9f0f-d3934c7ee1ee",
+      "source": {
+        "operatorID": "ContourPlot-operator-d430f695-c9a0-4c48-8cc2-776b5b5be8c0",
+        "portID": "output-0"
+      },
+      "target": {
+        "operatorID": "HeatMap-operator-55972f50-222c-4f85-9041-9a1a3a65605d",
+        "portID": "input-0"
+      }
+    },
+    {
+      "linkID": "link-3f9e6104-379d-4b1f-a083-34fd5239b4ca",
+      "source": {
+        "operatorID": "NetworkGraph-operator-f3c26f3a-8e31-4ac2-a477-7e747e31491e",
+        "portID": "output-0"
+      },
+      "target": {
+        "operatorID": "ContourPlot-operator-d430f695-c9a0-4c48-8cc2-776b5b5be8c0",
+        "portID": "input-0"
+      }
+    },
+    {
+      "linkID": "link-69efc9d9-bbca-421a-b268-d5208a54b67f",
+      "source": {
+        "operatorID": "QuiverPlot-operator-1ed3209b-4831-492e-aab1-c44b9ae78430",
+        "portID": "output-0"
+      },
+      "target": {
+        "operatorID": "NetworkGraph-operator-f3c26f3a-8e31-4ac2-a477-7e747e31491e",
+        "portID": "input-0"
+      }
+    },
+    {
+      "linkID": "link-681eb00e-4347-474c-b069-ec8f26e7b642",
+      "source": {
+        "operatorID": "Dendrogram-operator-00a7c79c-8ac3-4ef4-b7ac-b99affe5ad2e",
+        "portID": "output-0"
+      },
+      "target": {
+        "operatorID": "QuiverPlot-operator-dcebfefd-9f3a-4702-93ae-8a374c2a5c60",
+        "portID": "input-0"
+      }
+    },
+    {
+      "linkID": "link-48d763c5-e40c-4365-893b-761f795750e7",
+      "source": {
+        "operatorID": "HeatMap-operator-55972f50-222c-4f85-9041-9a1a3a65605d",
+        "portID": "output-0"
+      },
+      "target": {
+        "operatorID": "TernaryPlot-operator-2000371f-c80f-41c2-a51c-a00a0ed3ac10",
+        "portID": "input-0"
+      }
+    },
+    {
+      "linkID": "link-a4a7a917-0119-43b4-a277-9846f94e942e",
+      "source": {
+        "operatorID": "VolcanoPlot-operator-2ca7d2cd-69f3-4d26-935d-07cb048096d6",
+        "portID": "output-0"
+      },
+      "target": {
+        "operatorID": "QuiverPlot-operator-1ed3209b-4831-492e-aab1-c44b9ae78430",
+        "portID": "input-0"
+      }
+    },
+    {
+      "linkID": "link-14f8db40-5d82-4481-917e-bb58e99a1bea",
+      "source": {
+        "operatorID": "VolcanoPlot-operator-6a436ad1-b8c7-4804-af86-2ec7f6106f72",
+        "portID": "output-0"
+      },
+      "target": {
+        "operatorID": "TernaryPlot-operator-dd361c61-76a7-44f3-aa56-2ff10ce5ceaf",
+        "portID": "input-0"
+      }
+    },
+    {
+      "linkID": "link-13314015-aaec-4135-9c4b-28bd5eb9bde6",
+      "source": {
+        "operatorID": "CandlestickChart-operator-7f934e53-f4e0-4cb5-a0dc-db96f7d3de47",
+        "portID": "output-0"
+      },
+      "target": {
+        "operatorID": "VolcanoPlot-operator-2ca7d2cd-69f3-4d26-935d-07cb048096d6",
+        "portID": "input-0"
+      }
+    },
+    {
+      "linkID": "link-8d462478-100f-40f5-8bcd-ded0e6309ba7",
+      "source": {
+        "operatorID": "FunnelPlot-operator-1ace8f58-05f7-4fae-8b7a-48fa05ca869f",
+        "portID": "output-0"
+      },
+      "target": {
+        "operatorID": "VolcanoPlot-operator-6a436ad1-b8c7-4804-af86-2ec7f6106f72",
+        "portID": "input-0"
+      }
+    },
+    {
+      "linkID": "link-46c41f5d-4114-4f2d-9f9a-f00c8b373466",
+      "source": {
+        "operatorID": "WaterfallChart-operator-e51ec00c-1815-4c16-b50e-2292e5780461",
+        "portID": "output-0"
+      },
+      "target": {
+        "operatorID": "GaugeChart-operator-bdfb4bfd-51db-4300-a76b-919b66acbd34",
+        "portID": "input-0"
+      }
+    },
+    {
+      "linkID": "link-1b06e764-16df-46b7-aac4-63d3b172abbe",
+      "source": {
+        "operatorID": "HTMLVisualizer-operator-c815a669-81af-4adb-865b-d9f2404cc249",
+        "portID": "output-0"
+      },
+      "target": {
+        "operatorID": "CandlestickChart-operator-7f934e53-f4e0-4cb5-a0dc-db96f7d3de47",
+        "portID": "input-0"
+      }
+    },
+    {
+      "linkID": "link-d216ac60-ff87-4c08-9ad2-db305e60420a",
+      "source": {
+        "operatorID": "ImageVisualizer-operator-569d29a2-d6d7-408d-8b3e-1920ae25fac3",
+        "portID": "output-0"
+      },
+      "target": {
+        "operatorID": "FunnelPlot-operator-1ace8f58-05f7-4fae-8b7a-48fa05ca869f",
+        "portID": "input-0"
+      }
+    },
+    {
+      "linkID": "link-135a2eee-804c-4997-8aba-3bdebd1747d8",
+      "source": {
+        "operatorID": "URLVisualizer-operator-187113ba-5c92-4e55-beff-8c23923cae3d",
+        "portID": "output-0"
+      },
+      "target": {
+        "operatorID": "ImageVisualizer-operator-569d29a2-d6d7-408d-8b3e-1920ae25fac3",
+        "portID": "input-0"
+      }
+    },
+    {
+      "linkID": "link-d2392f2a-c338-4f1d-b611-07f5eb36f16a",
+      "source": {
+        "operatorID": "ChoroplethMap-operator-e0b89bb9-e0f9-45eb-91e9-681d8ea4d5f0",
+        "portID": "output-0"
+      },
+      "target": {
+        "operatorID": "URLVisualizer-operator-187113ba-5c92-4e55-beff-8c23923cae3d",
+        "portID": "input-0"
+      }
+    },
+    {
+      "linkID": "link-a291b356-364d-4ab7-a969-3aca0d4404ce",
+      "source": {
+        "operatorID": "Scatter3DChart-operator-929fb224-6e2f-4917-84ed-b04c361424c7",
+        "portID": "output-0"
+      },
+      "target": {
+        "operatorID": "NestedTable-operator-b107f3d0-9a4c-4118-8a5b-836bb94dc2a2",
+        "portID": "input-0"
+      }
+    },
+    {
+      "linkID": "link-78af87f8-94d7-4d5a-9ca8-1373ef7113ad",
+      "source": {
+        "operatorID": "NestedTable-operator-b107f3d0-9a4c-4118-8a5b-836bb94dc2a2",
+        "portID": "output-0"
+      },
+      "target": {
+        "operatorID": "WordCloud-operator-83815e13-64dc-4cb1-be4c-295d1f93fee6",
+        "portID": "input-0"
+      }
+    },
+    {
+      "linkID": "link-968b2431-f25e-4de4-bc28-4cf692ccac35",
+      "source": {
+        "operatorID": "WordCloud-operator-83815e13-64dc-4cb1-be4c-295d1f93fee6",
+        "portID": "output-0"
+      },
+      "target": {
+        "operatorID": "If-operator-8febb7e9-56b7-41c3-ae3e-b3dab428a7cd",
+        "portID": "input-0"
+      }
+    }
+  ],
+  "commentBoxes": [],
+  "settings": {
+    "dataTransferBatchSize": 400,
+    "executionMode": "PIPELINED"
+  }
+}

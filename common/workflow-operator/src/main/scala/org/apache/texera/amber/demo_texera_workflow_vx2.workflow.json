@@ -1,0 +1,400 @@
+{
+  "operators": [
+    {
+      "operatorID": "CSVFileScan-operator-52a5c4c1-6d4c-4ce6-8d58-c69e991b2b15",
+      "operatorType": "CSVFileScan",
+      "operatorVersion": "N/A",
+      "operatorProperties": {
+        "fileEncoding": "UTF_8",
+        "customDelimiter": ",",
+        "hasHeader": true,
+        "fileName": "https://raw.githubusercontent.com/vega/vega-datasets/main/data/sp500-2000.csv"
+      },
+      "inputPorts": [],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "CSV File Scan",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false
+    },
+    {
+      "operatorID": "PythonUDFV2-operator-da9d7c0b-301c-4074-9fe4-262c29fd2b34",
+      "operatorType": "PythonUDFV2",
+      "operatorVersion": "N/A",
+      "operatorProperties": {
+        "code": "from typing import Iterator, Optional, Union\nimport pandas as pd\nimport matplotlib.pyplot as plt\nfrom pytexera import *\nfrom core.models.schema.attribute_type import AttributeType\nclass ProcessTableOperator(UDFTableOperator):\n\n    def open(self) -> None:\n        pass\n\n    @overrides\n    def process_table(self, table: Table, port: int) -> Iterator[Optional[TableLike]]:\n        selected = table[['date', 'open', 'high', 'low', 'close', 'volume']].copy()\n        print('\\nStep 2: Select columns')\n        print(selected.head())\n        yield selected\n        return\n\n    def close(self) -> None:\n        pass\n",
+        "workers": 1,
+        "retainInputColumns": false,
+        "outputColumns": [
+          {
+            "attributeName": "date",
+            "attributeType": "string"
+          },
+          {
+            "attributeName": "open",
+            "attributeType": "double"
+          },
+          {
+            "attributeName": "high",
+            "attributeType": "double"
+          },
+          {
+            "attributeName": "low",
+            "attributeType": "double"
+          },
+          {
+            "attributeName": "close",
+            "attributeType": "double"
+          },
+          {
+            "attributeName": "volume",
+            "attributeType": "long"
+          }
+        ]
+      },
+      "inputPorts": [
+        {
+          "portID": "input-0",
+          "displayName": "",
+          "allowMultiInputs": true,
+          "isDynamicPort": false,
+          "dependencies": []
+        }
+      ],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "Select Columns",
+      "dynamicInputPorts": true,
+      "dynamicOutputPorts": true
+    },
+    {
+      "operatorID": "PythonUDFV2-operator-9763cabd-b5c1-46ca-97de-7de4796f11bf",
+      "operatorType": "PythonUDFV2",
+      "operatorVersion": "N/A",
+      "operatorProperties": {
+        "code": "from typing import Iterator, Optional, Union\nimport pandas as pd\nimport matplotlib.pyplot as plt\nfrom pytexera import *\nfrom core.models.schema.attribute_type import AttributeType\nclass ProcessTableOperator(UDFTableOperator):\n\n    def open(self) -> None:\n        pass\n\n    @overrides\n    def process_table(self, table: Table, port: int) -> Iterator[Optional[TableLike]]:\n        cleaned = table.dropna().copy()\n        print('\\nStep 3: Clean data')\n        print(cleaned.head())\n        yield cleaned\n        return\n\n    def close(self) -> None:\n        pass\n",
+        "workers": 1,
+        "retainInputColumns": false,
+        "outputColumns": [
+          {
+            "attributeName": "date",
+            "attributeType": "string"
+          },
+          {
+            "attributeName": "open",
+            "attributeType": "double"
+          },
+          {
+            "attributeName": "high",
+            "attributeType": "double"
+          },
+          {
+            "attributeName": "low",
+            "attributeType": "double"
+          },
+          {
+            "attributeName": "close",
+            "attributeType": "double"
+          },
+          {
+            "attributeName": "volume",
+            "attributeType": "long"
+          }
+        ]
+      },
+      "inputPorts": [
+        {
+          "portID": "input-0",
+          "displayName": "",
+          "allowMultiInputs": true,
+          "isDynamicPort": false,
+          "dependencies": []
+        }
+      ],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "Clean Data",
+      "dynamicInputPorts": true,
+      "dynamicOutputPorts": true
+    },
+    {
+      "operatorID": "PythonUDFV2-operator-cdae744a-1e5e-4e8f-bd77-10434620f798",
+      "operatorType": "PythonUDFV2",
+      "operatorVersion": "N/A",
+      "operatorProperties": {
+        "code": "from typing import Iterator, Optional, Union\nimport pandas as pd\nimport matplotlib.pyplot as plt\nfrom pytexera import *\nfrom core.models.schema.attribute_type import AttributeType\nclass ProcessTableOperator(UDFTableOperator):\n\n    def open(self) -> None:\n        pass\n\n    @overrides\n    def process_table(self, table: Table, port: int) -> Iterator[Optional[TableLike]]:\n        transformed = table.copy()\n        transformed['date'] = pd.to_datetime(transformed['date'], errors='coerce')\n        transformed = transformed.dropna(subset=['date']).copy()\n        transformed = transformed.sort_values('date')\n        transformed['daily_return'] = transformed['close'].pct_change() * 100\n        transformed['ma_30'] = transformed['close'].rolling(window=30).mean()\n        print('\\nStep 4: Transform data')\n        print(transformed.head())\n        yield transformed\n        return\n\n    def close(self) -> None:\n        pass\n",
+        "workers": 1,
+        "retainInputColumns": false,
+        "outputColumns": [
+          {
+            "attributeName": "date",
+            "attributeType": "timestamp"
+          },
+          {
+            "attributeName": "open",
+            "attributeType": "double"
+          },
+          {
+            "attributeName": "high",
+            "attributeType": "double"
+          },
+          {
+            "attributeName": "low",
+            "attributeType": "double"
+          },
+          {
+            "attributeName": "close",
+            "attributeType": "double"
+          },
+          {
+            "attributeName": "volume",
+            "attributeType": "long"
+          },
+          {
+            "attributeName": "daily_return",
+            "attributeType": "double"
+          },
+          {
+            "attributeName": "ma_30",
+            "attributeType": "double"
+          }
+        ]
+      },
+      "inputPorts": [
+        {
+          "portID": "input-0",
+          "displayName": "",
+          "allowMultiInputs": true,
+          "isDynamicPort": false,
+          "dependencies": []
+        }
+      ],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "Transform Data",
+      "dynamicInputPorts": true,
+      "dynamicOutputPorts": true
+    },
+    {
+      "operatorID": "PythonUDFV2-operator-f45cfd8f-0f39-42c6-a97a-35a0094359da",
+      "operatorType": "PythonUDFV2",
+      "operatorVersion": "N/A",
+      "operatorProperties": {
+        "code": "from typing import Iterator, Optional, Union\nimport pandas as pd\nimport matplotlib.pyplot as plt\nfrom pytexera import *\nfrom core.models.schema.attribute_type import AttributeType\nclass ProcessTableOperator(UDFTableOperator):\n\n    def open(self) -> None:\n        self.output_file = 'clean_sp500_2000.csv'\n        # Temporary hardcoded default for UI parameter 'output_file' from the source script.\n        # self.UiParameter('output_file', AttributeType.STRING)  # UiParameter disabled for now\n\n    @overrides\n    def process_table(self, table: Table, port: int) -> Iterator[Optional[TableLike]]:\n        table.to_csv(self.output_file, index=False)\n        print(f'\\nStep 5: Load data')\n        print(f'Saved cleaned data to: {self.output_file}')\n        yield table\n\n    def close(self) -> None:\n        pass\n",
+        "workers": 1,
+        "retainInputColumns": false,
+        "outputColumns": [
+          {
+            "attributeName": "date",
+            "attributeType": "timestamp"
+          },
+          {
+            "attributeName": "open",
+            "attributeType": "double"
+          },
+          {
+            "attributeName": "high",
+            "attributeType": "double"
+          },
+          {
+            "attributeName": "low",
+            "attributeType": "double"
+          },
+          {
+            "attributeName": "close",
+            "attributeType": "double"
+          },
+          {
+            "attributeName": "volume",
+            "attributeType": "long"
+          },
+          {
+            "attributeName": "daily_return",
+            "attributeType": "double"
+          },
+          {
+            "attributeName": "ma_30",
+            "attributeType": "double"
+          }
+        ]
+      },
+      "inputPorts": [
+        {
+          "portID": "input-0",
+          "displayName": "",
+          "allowMultiInputs": true,
+          "isDynamicPort": false,
+          "dependencies": []
+        }
+      ],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "Load Data",
+      "dynamicInputPorts": true,
+      "dynamicOutputPorts": true
+    },
+    {
+      "operatorID": "TimeSeriesPlot-operator-4c61e814-c060-4a03-8170-2bd0c441ac8e",
+      "operatorType": "TimeSeriesPlot",
+      "operatorVersion": "N/A",
+      "operatorProperties": {
+        "timeColumn": "date",
+        "valueColumn": "close",
+        "line": "close",
+        "facetColumn": "No Selection",
+        "categoryColumn": "No Selection",
+        "slider": false
+      },
+      "inputPorts": [
+        {
+          "portID": "input-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false,
+          "dependencies": []
+        }
+      ],
+      "outputPorts": [
+        {
+          "portID": "output-0",
+          "displayName": "",
+          "allowMultiInputs": false,
+          "isDynamicPort": false
+        }
+      ],
+      "showAdvanced": false,
+      "isDisabled": false,
+      "customDisplayName": "Plot Data",
+      "dynamicInputPorts": false,
+      "dynamicOutputPorts": false,
+      "viewResult": true
+    }
+  ],
+  "operatorPositions": {
+    "CSVFileScan-operator-52a5c4c1-6d4c-4ce6-8d58-c69e991b2b15": {
+      "x": 240,
+      "y": 180
+    },
+    "PythonUDFV2-operator-da9d7c0b-301c-4074-9fe4-262c29fd2b34": {
+      "x": 540,
+      "y": 180
+    },
+    "PythonUDFV2-operator-9763cabd-b5c1-46ca-97de-7de4796f11bf": {
+      "x": 840,
+      "y": 180
+    },
+    "PythonUDFV2-operator-cdae744a-1e5e-4e8f-bd77-10434620f798": {
+      "x": 1140,
+      "y": 180
+    },
+    "PythonUDFV2-operator-f45cfd8f-0f39-42c6-a97a-35a0094359da": {
+      "x": 1440,
+      "y": 180
+    },
+    "TimeSeriesPlot-operator-4c61e814-c060-4a03-8170-2bd0c441ac8e": {
+      "x": 1440,
+      "y": 360
+    }
+  },
+  "links": [
+    {
+      "linkID": "link-84bd3626-9908-4fb1-b746-ad9da043aa92",
+      "source": {
+        "operatorID": "CSVFileScan-operator-52a5c4c1-6d4c-4ce6-8d58-c69e991b2b15",
+        "portID": "output-0"
+      },
+      "target": {
+        "operatorID": "PythonUDFV2-operator-da9d7c0b-301c-4074-9fe4-262c29fd2b34",
+        "portID": "input-0"
+      }
+    },
+    {
+      "linkID": "link-49eb65dd-4c68-4df6-a245-aedb508b7857",
+      "source": {
+        "operatorID": "PythonUDFV2-operator-da9d7c0b-301c-4074-9fe4-262c29fd2b34",
+        "portID": "output-0"
+      },
+      "target": {
+        "operatorID": "PythonUDFV2-operator-9763cabd-b5c1-46ca-97de-7de4796f11bf",
+        "portID": "input-0"
+      }
+    },
+    {
+      "linkID": "link-bf345bd5-6196-482e-bda1-bba512abf7da",
+      "source": {
+        "operatorID": "PythonUDFV2-operator-9763cabd-b5c1-46ca-97de-7de4796f11bf",
+        "portID": "output-0"
+      },
+      "target": {
+        "operatorID": "PythonUDFV2-operator-cdae744a-1e5e-4e8f-bd77-10434620f798",
+        "portID": "input-0"
+      }
+    },
+    {
+      "linkID": "link-6031e10a-0ac6-42af-9321-2782a2be6d8e",
+      "source": {
+        "operatorID": "PythonUDFV2-operator-cdae744a-1e5e-4e8f-bd77-10434620f798",
+        "portID": "output-0"
+      },
+      "target": {
+        "operatorID": "PythonUDFV2-operator-f45cfd8f-0f39-42c6-a97a-35a0094359da",
+        "portID": "input-0"
+      }
+    },
+    {
+      "linkID": "link-9b1eacbb-1a02-47b7-b14e-6c1d41964c8e",
+      "source": {
+        "operatorID": "PythonUDFV2-operator-cdae744a-1e5e-4e8f-bd77-10434620f798",
+        "portID": "output-0"
+      },
+      "target": {
+        "operatorID": "TimeSeriesPlot-operator-4c61e814-c060-4a03-8170-2bd0c441ac8e",
+        "portID": "input-0"
+      }
+    }
+  ],
+  "commentBoxes": [],
+  "settings": {
+    "dataTransferBatchSize": 400
+  }
+}
